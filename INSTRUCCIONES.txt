@@ -1,0 +1,38 @@
+MUNDIAL 2026 PREDICTOR
+======================
+
+SETUP (una sola vez):
+  pip install requests scipy numpy pandas
+
+CORRER EL PREDICTOR:
+  python src/predictor.py
+
+  Opciones:
+    --quick      → 10k simulaciones (para testeo rápido, ~2s)
+    --sims 50000 → número personalizado de simulaciones
+
+VER EL DASHBOARD:
+  Abrir dashboard.html en el browser.
+  El dashboard lee automáticamente data/predictions.json.
+
+ACTUALIZAR DURANTE EL MUNDIAL:
+  Correr python src/predictor.py cada vez que quieras actualizar.
+  Las predicciones se recalculan con los resultados reales de la API.
+  El dashboard también se auto-actualiza cada 5 minutos si está abierto.
+
+OPCIONAL - KEY DE API (más datos, más llamadas):
+  1. Registrarse gratis en https://www.football-data.org/
+  2. Copiar la API key
+  3. Setear variable de entorno: FOOTBALL_DATA_KEY=tu_key_aqui
+  4. Windows: set FOOTBALL_DATA_KEY=tu_key (o agregarlo en Configuración → Variables de entorno)
+
+ESTRUCTURA:
+  mundial2026/
+  ├── src/
+  │   ├── fetcher.py      → descarga datos de la API y Elo ratings
+  │   ├── model.py        → Poisson + Monte Carlo
+  │   └── predictor.py    → orquestador principal
+  ├── data/
+  │   ├── predictions.json  → generado automáticamente
+  │   └── cache.json        → cache de la API
+  └── dashboard.html        → abrir en el browser

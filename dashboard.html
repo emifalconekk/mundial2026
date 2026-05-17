@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundial 2026 - Predictor</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f172a;color:#e2e8f0;font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+header{background:linear-gradient(135deg,#1e3a5f,#0f172a);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1e293b;flex-wrap:wrap;gap:10px}
+header h1{font-size:1.4rem;font-weight:700;color:#f8fafc}
+.tabs{display:flex;gap:4px;padding:12px 24px;background:#0f172a;border-bottom:1px solid #1e293b;overflow-x:auto}
+.tab{padding:8px 18px;border-radius:8px;cursor:pointer;font-size:.9rem;color:#94a3b8;white-space:nowrap;transition:.2s}
+.tab:hover{background:#1e293b;color:#e2e8f0}
+.tab.active{background:#1d4ed8;color:#fff;font-weight:600}
+main{padding:24px;max-width:1400px;margin:0 auto}
+.section{display:none}.section.active{display:block}
+.card{background:#1e293b;border-radius:12px;padding:20px;margin-bottom:16px;border:1px solid #334155}
+.card h2{font-size:1rem;color:#94a3b8;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:768px){.grid-4{grid-template-columns:1fr 1fr}}
+.stat-card{background:#0f172a;border-radius:10px;padding:16px;text-align:center;border:1px solid #1e293b}
+.stat-val{font-size:2rem;font-weight:800;color:#3b82f6}.stat-lbl{font-size:.8rem;color:#64748b;margin-top:4px}
+.champion-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:#0f172a;margin-bottom:6px;border:1px solid #1e293b;transition:.15s}
+.champion-item:hover{border-color:#3b82f6}
+.champion-rank{font-size:.8rem;color:#475569;width:24px;text-align:center}
+.champion-flag{font-size:1.4rem}
+.champion-name{flex:1;font-weight:600}
+.champion-bar-wrap{width:120px;background:#1e293b;border-radius:4px;height:6px}
+.champion-bar{height:6px;border-radius:4px;background:#3b82f6;transition:.5s}
+.champion-pct{font-size:.85rem;font-weight:700;color:#3b82f6;width:48px;text-align:right}
+.match-card{background:#0f172a;border-radius:10px;padding:16px;margin-bottom:10px;border:1px solid #1e293b}
+.match-teams{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-weight:700}
+.match-team{text-align:center;flex:1}.match-vs{color:#475569;font-size:.9rem;padding:0 12px}
+.prob-row{display:flex;gap:6px;margin-top:8px}
+.prob-pill{flex:1;text-align:center;border-radius:6px;padding:6px 4px;font-size:.8rem;font-weight:600}
+.prob-w{background:#1d4ed820;color:#60a5fa;border:1px solid #1d4ed840}
+.prob-d{background:#71717a20;color:#a1a1aa;border:1px solid #71717a40}
+.prob-l{background:#dc262620;color:#f87171;border:1px solid #dc262640}
+.scoreline-grid{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.sc{background:#1e293b;border-radius:5px;padding:3px 8px;font-size:.75rem;color:#94a3b8}
+.group-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.group-table th{color:#64748b;padding:6px 8px;text-align:left;border-bottom:1px solid #334155}
+.group-table td{padding:7px 8px;border-bottom:1px solid #1e293b}
+.group-table tr:last-child td{border-bottom:none}
+.result-item{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#0f172a;border-radius:8px;margin-bottom:6px;font-size:.85rem;border:1px solid #1e293b}
+.result-score{font-weight:800;font-size:1rem;background:#1e293b;padding:2px 10px;border-radius:6px;min-width:50px;text-align:center}
+.loading{text-align:center;padding:60px 20px;color:#475569;font-size:1.1rem}
+.spinner{width:36px;height:36px;border:3px solid #1e293b;border-top-color:#3b82f6;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.featured{background:linear-gradient(135deg,#1e3a5f22,#1e293b);border:1px solid #1d4ed840;border-radius:12px;padding:20px;margin-bottom:16px}
+.featured-teams{display:flex;align-items:center;justify-content:center;gap:20px;font-size:1.3rem;font-weight:800}
+.featured-vs{color:#475569;font-size:1rem}
+.featured-probs{display:flex;gap:8px;margin-top:14px}
+.fp{flex:1;text-align:center;background:#0f172a;border-radius:8px;padding:10px;border:1px solid #334155}
+.fp-val{font-size:1.4rem;font-weight:800}.fp-lbl{font-size:.75rem;color:#64748b;margin-top:2px}
+.adj-badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.72rem;font-weight:600;background:#f59e0b20;color:#fbbf24;border:1px solid #f59e0b40;margin-left:6px}
+/* Toggle FIFA */
+.mode-toggle{display:flex;align-items:center;gap:10px;background:#0f172a;border:1px solid #334155;border-radius:10px;padding:6px 12px}
+.mode-toggle-label{font-size:.8rem;color:#64748b;white-space:nowrap}
+.toggle-switch{position:relative;display:inline-block;width:52px;height:26px}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#1e293b;border-radius:26px;transition:.3s;border:1px solid #334155}
+.toggle-slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:#64748b;border-radius:50%;transition:.3s}
+input:checked + .toggle-slider{background:#7c3aed;border-color:#7c3aed}
+input:checked + .toggle-slider:before{transform:translateX(26px);background:#fff}
+.mode-label{font-size:.85rem;font-weight:700;transition:.2s}
+.mode-label.manual{color:#64748b}
+.mode-label.fifa{color:#a78bfa}
+.fifa-badge{display:inline-block;background:#7c3aed20;color:#a78bfa;border:1px solid #7c3aed40;border-radius:4px;padding:1px 7px;font-size:.7rem;font-weight:700;margin-left:6px}
+.fifa-disabled{opacity:.4;pointer-events:none}
+.mode-banner{text-align:center;padding:6px;font-size:.8rem;font-weight:600;border-radius:0;transition:.3s;display:none}
+.mode-banner.show{display:block}
+.mode-banner.manual-mode{background:#1e293b;color:#94a3b8}
+.mode-banner.fifa-mode{background:#7c3aed20;color:#a78bfa;border-top:1px solid #7c3aed30;border-bottom:1px solid #7c3aed30}
+/* Planteles */
+.player-row{display:flex;align-items:center;gap:8px;padding:7px 10px;background:#0f172a;border-radius:7px;margin-bottom:4px;border:1px solid #1e293b;transition:.15s}
+.player-row:hover{border-color:#334155}
+.player-row.baja{opacity:.5;text-decoration:line-through}
+.player-row input[type=checkbox]{accent-color:#ef4444;width:15px;height:15px;cursor:pointer;flex-shrink:0}
+.player-imp{font-size:.7rem;padding:1px 6px;border-radius:3px;font-weight:700;flex-shrink:0}
+.imp-high{background:#ef444420;color:#f87171;border:1px solid #ef444440}
+.imp-med{background:#f59e0b20;color:#fbbf24;border:1px solid #f59e0b40}
+.imp-low{background:#10b98120;color:#34d399;border:1px solid #10b98140}
+.player-fifa{font-size:.7rem;padding:1px 6px;border-radius:3px;font-weight:700;flex-shrink:0;background:#7c3aed20;color:#a78bfa;border:1px solid #7c3aed40}
+.team-selector{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.team-selector select{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:8px 12px;font-size:.9rem;cursor:pointer}
+.lesiones-summary{background:#ef444410;border:1px solid #ef444440;border-radius:8px;padding:10px 14px;margin-top:12px;font-size:.85rem;color:#f87171;display:none}
+.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;transition:.2s}
+.btn-primary{background:#1d4ed8;color:#fff}.btn-primary:hover{background:#1e40af}
+.btn-danger{background:#ef444420;color:#f87171;border:1px solid #ef444440}.btn-danger:hover{background:#ef444440}
+.btn-success{background:#16a34a20;color:#4ade80;border:1px solid #16a34a40}.btn-success:hover{background:#16a34a40}
+#last-updated{font-size:.75rem;color:#64748b}
+</style>
+</head>
+<body>
+<header>
+  <h1>⚽ Mundial 2026 — Predictor</h1>
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <div class="mode-toggle" id="mode-toggle-wrap">
+      <span class="mode-label manual" id="lbl-manual">Manual</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="fifa-toggle" onchange="onModeToggle(this.checked)" disabled>
+        <span class="toggle-slider"></span>
+      </label>
+      <span class="mode-label fifa" id="lbl-fifa">FIFA 26 <span id="fifa-avail-badge"></span></span>
+    </div>
+    <span id="last-updated">Cargando...</span>
+    <button class="btn btn-primary" id="btn-refresh" onclick="refreshData()">↻ Actualizar</button>
+  </div>
+</header>
+
+<div class="mode-banner" id="mode-banner"></div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('overview')">🏆 Campeón</div>
+  <div class="tab" onclick="showTab('matches')">⚡ Próximos</div>
+  <div class="tab" onclick="showTab('groups')">📊 Grupos</div>
+  <div class="tab" onclick="showTab('results')">📋 Resultados</div>
+  <div class="tab" onclick="showTab('planteles')">🏥 Planteles</div>
+</div>
+
+<main>
+  <div class="section active" id="tab-overview">
+    <div class="grid-4" style="margin-bottom:16px">
+      <div class="stat-card"><div class="stat-val" id="stat-sims">-</div><div class="stat-lbl">Simulaciones</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-played">-</div><div class="stat-lbl">Jugados</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-remaining">-</div><div class="stat-lbl">Por jugar</div></div>
+      <div class="stat-card"><div class="stat-val" id="stat-elapsed">-</div><div class="stat-lbl">Tiempo (s)</div></div>
+    </div>
+    <div id="featured-match-container"></div>
+    <div class="card">
+      <h2>🏆 Probabilidades de ser Campeón</h2>
+      <div id="champion-list"><div class="loading"><div class="spinner"></div>Calculando...</div></div>
+    </div>
+  </div>
+
+  <div class="section" id="tab-matches">
+    <div class="card">
+      <h2>⚡ Próximos Partidos</h2>
+      <div id="matches-list"><div class="loading"><div class="spinner"></div>Calculando...</div></div>
+    </div>
+  </div>
+
+  <div class="section" id="tab-groups">
+    <div class="card">
+      <h2>📊 Grupos — Probabilidades de Clasificar</h2>
+      <div id="groups-container"><div class="loading"><div class="spinner"></div>Calculando...</div></div>
+    </div>
+  </div>
+
+  <div class="section" id="tab-results">
+    <div class="card">
+      <h2>📋 Resultados</h2>
+      <div id="results-list"><div class="loading"><div class="spinner"></div>Cargando...</div></div>
+    </div>
+  </div>
+
+  <div class="section" id="tab-planteles">
+    <div class="card">
+      <h2>🏥 Bajas / Lesionados</h2>
+      <p style="color:#94a3b8;font-size:.85rem;margin-bottom:12px">
+        Marcá jugadores lesionados o suspendidos. El impacto en Elo cambia según el modo activo.
+      </p>
+      <div class="team-selector">
+        <select id="team-select" onchange="renderSquad(this.value)">
+          <option value="">— Elegí un equipo —</option>
+        </select>
+        <button class="btn btn-danger" onclick="resetLesiones()">🗑 Limpiar todo</button>
+        <button class="btn btn-success" onclick="exportarLesiones()">💾 Exportar lesiones.json</button>
+      </div>
+      <div id="lesiones-summary" class="lesiones-summary"></div>
+      <div id="squad-container"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+// __DATA_INJECT_HERE__
+
+// ─── State ────────────────────────────────────────────────────────────────────
+let DATA = null;
+let FIFA_MODE = false;
+let LESIONES_STATE = {};
+
+const FLAGS = {
+  "Argentina":"🇦🇷","France":"🇫🇷","England":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","Spain":"🇪🇸","Brazil":"🇧🇷","Portugal":"🇵🇹",
+  "Belgium":"🇧🇪","Netherlands":"🇳🇱","Germany":"🇩🇪","Croatia":"🇭🇷","Uruguay":"🇺🇾","Colombia":"🇨🇴",
+  "Norway":"🇳🇴","Mexico":"🇲🇽","United States":"🇺🇸","Switzerland":"🇨🇭","Sweden":"🇸🇪","Senegal":"🇸🇳",
+  "Morocco":"🇲🇦","Japan":"🇯🇵","South Korea":"🇰🇷","Scotland":"🏴󠁧󠁢󠁳󠁣󠁴󠁿","Australia":"🇦🇺","Turkey":"🇹🇷",
+  "Czechia":"🇨🇿","Canada":"🇨🇦","Austria":"🇦🇹","Ecuador":"🇪🇨","Egypt":"🇪🇬","Algeria":"🇩🇿",
+  "Tunisia":"🇹🇳","Bosnia and Herzegovina":"🇧🇦","Ghana":"🇬🇭","Ivory Coast":"🇨🇮","Iran":"🇮🇷",
+  "Saudi Arabia":"🇸🇦","Panama":"🇵🇦","Qatar":"🇶🇦","Paraguay":"🇵🇾","Uzbekistan":"🇺🇿",
+  "Jordan":"🇯🇴","South Africa":"🇿🇦","Iraq":"🇮🇶","DR Congo":"🇨🇩","New Zealand":"🇳🇿",
+  "Cape Verde":"🇨🇻","Haiti":"🇭🇹","Curacao":"🇨🇼",
+};
+function flag(t){return FLAGS[t]||"🏳️";}
+function pct(v){return(v*100).toFixed(1)+"%";}
+
+// ─── Mode toggle ──────────────────────────────────────────────────────────────
+function onModeToggle(checked){
+  FIFA_MODE = checked;
+  const banner = document.getElementById("mode-banner");
+  if(checked){
+    banner.textContent = "🟣 Modo FIFA 26 — Importancia calculada por Z-score sobre ratings de EA Sports";
+    banner.className = "mode-banner show fifa-mode";
+  } else {
+    banner.textContent = "⚪ Modo Manual — Importancia estimada manualmente";
+    banner.className = "mode-banner show manual-mode";
+  }
+  renderAll();
+}
+
+function setupToggle(){
+  const hasFifa = DATA && DATA.has_fifa_data && DATA.predictions_fifa;
+  const toggle = document.getElementById("fifa-toggle");
+  const badge = document.getElementById("fifa-avail-badge");
+  const wrap = document.getElementById("mode-toggle-wrap");
+  if(hasFifa){
+    toggle.disabled = false;
+    badge.innerHTML = '<span class="fifa-badge">ACTIVO</span>';
+    wrap.title = "Datos FIFA 26 disponibles — podés comparar modos";
+  } else {
+    toggle.disabled = true;
+    toggle.checked = false;
+    FIFA_MODE = false;
+    badge.innerHTML = '<span class="fifa-badge" style="opacity:.4">2 JUN</span>';
+    wrap.title = "Datos FIFA 26 disponibles el 2 de junio";
+  }
+}
+
+function activeData(){
+  if(FIFA_MODE && DATA.predictions_fifa) return {
+    predictions: DATA.predictions_fifa,
+    top_champions: DATA.top_champions_fifa,
+    elo_adjustments: DATA.elo_adjustments_fifa || {},
+  };
+  return {
+    predictions: DATA.predictions,
+    top_champions: DATA.top_champions,
+    elo_adjustments: DATA.elo_adjustments || {},
+  };
+}
+
+// ─── Tab navigation ───────────────────────────────────────────────────────────
+function showTab(id){
+  document.querySelectorAll(".tab").forEach((t,i)=>{
+    const tabs=["overview","matches","groups","results","planteles"];
+    t.classList.toggle("active",tabs[i]===id);
+  });
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("tab-"+id).classList.add("active");
+  if(id==="planteles")initPlanteles();
+}
+
+// ─── Data loading ─────────────────────────────────────────────────────────────
+async function loadData(){
+  try{
+    if(window.EMBEDDED_DATA){
+      DATA = window.EMBEDDED_DATA;
+      renderAll();
+      var t = new Date(DATA.generated_at).toLocaleString("es-UY");
+      document.getElementById("last-updated").textContent = "Actualizado: "+t;
+      return;
+    }
+    const resp = await fetch("data/predictions.json?"+Date.now());
+    if(!resp.ok) throw new Error("No predictions.json");
+    DATA = await resp.json();
+    renderAll();
+  } catch(e){
+    console.warn("Sin datos:",e);
+    DATA = getDemoData();
+    renderAll();
+    document.getElementById("last-updated").textContent = "⚠️ Demo — corré predictor.py para datos reales";
+  }
+}
+
+async function refreshData(){
+  const btn = document.getElementById("btn-refresh");
+  btn.disabled = true; btn.textContent = "↻ Actualizando...";
+  window.location.reload();
+}
+
+// ─── Render all ───────────────────────────────────────────────────────────────
+function renderAll(){
+  setupToggle();
+  renderStats();
+  renderChampionList();
+  renderFeaturedMatch();
+  renderMatchesList();
+  renderGroups();
+  renderResults();
+}
+
+function renderStats(){
+  document.getElementById("stat-sims").textContent = (DATA.simulations||0).toLocaleString();
+  document.getElementById("stat-played").textContent = DATA.matches_played||0;
+  document.getElementById("stat-remaining").textContent = DATA.matches_remaining||0;
+  document.getElementById("stat-elapsed").textContent = DATA.elapsed_seconds||"?";
+}
+
+function renderChampionList(){
+  const {top_champions, elo_adjustments} = activeData();
+  if(!top_champions||!top_champions.length){
+    document.getElementById("champion-list").innerHTML="<p style='color:#64748b'>Sin datos</p>";return;
+  }
+  const max = top_champions[0].winner;
+  document.getElementById("champion-list").innerHTML = top_champions.map((t,i)=>{
+    const adj = elo_adjustments[t.team];
+    const adjBadge = adj ? `<span class="adj-badge">${adj>0?"+":""}${adj} Elo</span>` : "";
+    const barW = max>0 ? Math.round((t.winner/max)*100) : 0;
+    return `<div class="champion-item">
+      <span class="champion-rank">${i+1}</span>
+      <span class="champion-flag">${flag(t.team)}</span>
+      <span class="champion-name">${t.team}${adjBadge}</span>
+      <span style="font-size:.75rem;color:#475569">${pct(t.final)} final</span>
+      <div class="champion-bar-wrap"><div class="champion-bar" style="width:${barW}%"></div></div>
+      <span class="champion-pct">${pct(t.winner)}</span>
+    </div>`;
+  }).join("");
+}
+
+function renderFeaturedMatch(){
+  const matches = DATA.next_matches||[];
+  if(!matches.length){document.getElementById("featured-match-container").innerHTML="";return;}
+  const m = matches[0];
+  const sc = (m.top_scorelines||[]).slice(0,6).map(([s,p])=>`<span class="sc">${s} <b>${(p*100).toFixed(0)}%</b></span>`).join("");
+  document.getElementById("featured-match-container").innerHTML = `
+    <div class="featured">
+      <div style="font-size:.75rem;color:#64748b;margin-bottom:8px">PRÓXIMO PARTIDO — ${m.date}</div>
+      <div class="featured-teams">
+        <span>${flag(m.home)} ${m.home}</span>
+        <span class="featured-vs">vs</span>
+        <span>${flag(m.away)} ${m.away}</span>
+      </div>
+      <div class="featured-probs">
+        <div class="fp"><div class="fp-val" style="color:#60a5fa">${pct(m.win_home)}</div><div class="fp-lbl">${m.home}</div></div>
+        <div class="fp"><div class="fp-val" style="color:#a1a1aa">${pct(m.draw)}</div><div class="fp-lbl">Empate</div></div>
+        <div class="fp"><div class="fp-val" style="color:#f87171">${pct(m.win_away)}</div><div class="fp-lbl">${m.away}</div></div>
+      </div>
+      <div class="scoreline-grid">${sc}</div>
+    </div>`;
+}
+
+function renderMatchesList(){
+  const matches = DATA.next_matches||[];
+  if(!matches.length){
+    document.getElementById("matches-list").innerHTML="<p style='color:#64748b;text-align:center;padding:40px'>Sin partidos próximos</p>";return;
+  }
+  document.getElementById("matches-list").innerHTML = matches.map(m=>{
+    const sc = (m.top_scorelines||[]).slice(0,6).map(([s,p])=>`<span class="sc">${s} ${(p*100).toFixed(0)}%</span>`).join("");
+    return `<div class="match-card">
+      <div style="font-size:.72rem;color:#475569;margin-bottom:6px">${m.date} · ${m.stage.replace(/_/g," ")}</div>
+      <div class="match-teams">
+        <div class="match-team">${flag(m.home)} ${m.home}</div>
+        <div class="match-vs">vs</div>
+        <div class="match-team">${flag(m.away)} ${m.away}</div>
+      </div>
+      <div class="prob-row">
+        <div class="prob-pill prob-w">${flag(m.home)} ${pct(m.win_home)}</div>
+        <div class="prob-pill prob-d">Empate ${pct(m.draw)}</div>
+        <div class="prob-pill prob-l">${flag(m.away)} ${pct(m.win_away)}</div>
+      </div>
+      <div class="scoreline-grid">${sc}</div>
+    </div>`;
+  }).join("");
+}
+
+function renderGroups(){
+  const groups = DATA.groups||{};
+  const {predictions, elo_adjustments} = activeData();
+  const html = Object.entries(groups).map(([g,teams])=>`
+    <div class="card" style="margin-bottom:12px">
+      <h2>Grupo ${g}</h2>
+      <table class="group-table">
+        <tr><th>Equipo</th><th>R16</th><th>QF</th><th>SF</th><th>Final</th><th>🏆</th></tr>
+        ${teams.map(t=>{
+          const p = predictions[t]||{};
+          const adj = elo_adjustments[t];
+          const adjTxt = adj ? ` <small style="color:#fbbf24">(${adj>0?"+":""}${adj})</small>` : "";
+          return `<tr>
+            <td>${flag(t)} ${t}${adjTxt}</td>
+            <td style="color:#60a5fa;font-weight:600">${pct(p.r16||0)}</td>
+            <td>${pct(p.qf||0)}</td>
+            <td>${pct(p.sf||0)}</td>
+            <td>${pct(p.final||0)}</td>
+            <td style="color:#f59e0b;font-weight:700">${pct(p.winner||0)}</td>
+          </tr>`;
+        }).join("")}
+      </table>
+    </div>`).join("");
+  document.getElementById("groups-container").innerHTML = html||"<p style='color:#64748b'>Sin datos</p>";
+}
+
+function renderResults(){
+  const results = DATA.recent_results||[];
+  if(!results.length){
+    document.getElementById("results-list").innerHTML="<p style='color:#64748b;text-align:center;padding:40px'>El Mundial aún no comenzó.</p>";return;
+  }
+  document.getElementById("results-list").innerHTML = results.map(r=>{
+    const hw=r.home_goals>r.away_goals, aw=r.away_goals>r.home_goals;
+    return `<div class="result-item">
+      <span style="color:#64748b;font-size:.75rem;width:80px">${r.date}</span>
+      <span style="flex:1;text-align:right;font-weight:${hw?700:400}">${flag(r.home)} ${r.home}</span>
+      <span class="result-score">${r.home_goals} - ${r.away_goals}</span>
+      <span style="flex:1;font-weight:${aw?700:400}">${flag(r.away)} ${r.away}</span>
+    </div>`;
+  }).join("");
+}
+
+// ─── Planteles ────────────────────────────────────────────────────────────────
+function initPlanteles(){
+  if(!DATA)return;
+  const saved = localStorage.getItem("lesiones_wc2026");
+  if(saved) try{LESIONES_STATE=JSON.parse(saved);}catch(e){}
+  else if(DATA.lesiones) LESIONES_STATE = JSON.parse(JSON.stringify(DATA.lesiones));
+
+  const sel = document.getElementById("team-select");
+  if(sel.options.length<=1){
+    Object.keys(DATA.squads||{}).sort().forEach(t=>{
+      const o=document.createElement("option");
+      o.value=t; o.textContent=flag(t)+" "+t;
+      sel.appendChild(o);
+    });
+  }
+  updateLesionesSummary();
+}
+
+function renderSquad(team){
+  if(!team||!DATA){document.getElementById("squad-container").innerHTML="";return;}
+  const squads = FIFA_MODE && DATA.squads_fifa ? DATA.squads_fifa : DATA.squads;
+  const players = (squads[team]||[]).slice().sort((a,b)=>b.imp-a.imp);
+  const injured = LESIONES_STATE[team]||[];
+  const showFifa = DATA.has_fifa_data && DATA.squads_fifa;
+
+  document.getElementById("squad-container").innerHTML = players.map(p=>{
+    const isBaja = injured.includes(p.name);
+    const impClass = p.imp>=70?"imp-high":p.imp>=45?"imp-med":"imp-low";
+    // Show FIFA overall if available
+    const fifaBadge = showFifa && p.fifa_overall > 0
+      ? `<span class="player-fifa">${p.fifa_overall}</span>` : "";
+    return `<div class="player-row ${isBaja?"baja":""}">
+      <input type="checkbox" ${isBaja?"checked":""} onchange="toggleBaja('${team}','${p.name.replace(/'/g,"\\'")}',this.checked)">
+      <span class="player-imp ${impClass}" title="Importancia ${FIFA_MODE?'FIFA':'manual'}">${p.imp}</span>
+      ${fifaBadge}
+      <span style="flex:1">${p.name}</span>
+      <span style="font-size:.72rem;color:#475569">${p.pos}</span>
+    </div>`;
+  }).join("");
+  updateLesionesSummary();
+}
+
+function toggleBaja(team,player,checked){
+  if(!LESIONES_STATE[team]) LESIONES_STATE[team]=[];
+  if(checked){
+    if(!LESIONES_STATE[team].includes(player)) LESIONES_STATE[team].push(player);
+  } else {
+    LESIONES_STATE[team] = LESIONES_STATE[team].filter(p=>p!==player);
+  }
+  localStorage.setItem("lesiones_wc2026",JSON.stringify(LESIONES_STATE));
+  renderSquad(team);
+}
+
+function updateLesionesSummary(){
+  const total = Object.values(LESIONES_STATE).flat().length;
+  const el = document.getElementById("lesiones-summary");
+  if(total>0){
+    const teams = Object.entries(LESIONES_STATE).filter(([,v])=>v.length>0);
+    el.style.display="block";
+    el.innerHTML="⚠️ <b>"+total+" baja(s)</b>: "+teams.map(([t,v])=>flag(t)+" "+t+" ("+v.length+")").join(", ");
+  } else {
+    el.style.display="none";
+  }
+}
+
+function resetLesiones(){
+  if(!confirm("¿Limpiar todas las bajas?"))return;
+  LESIONES_STATE={};
+  localStorage.removeItem("lesiones_wc2026");
+  renderSquad(document.getElementById("team-select").value);
+  updateLesionesSummary();
+}
+
+function exportarLesiones(){
+  const blob=new Blob([JSON.stringify(LESIONES_STATE,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="lesiones.json"; a.click();
+}
+
+// ─── Demo data ────────────────────────────────────────────────────────────────
+function getDemoData(){
+  const groups={"A":["Mexico","South Africa","South Korea","Czechia"],"B":["Canada","Bosnia and Herzegovina","Qatar","Switzerland"],"C":["Brazil","Morocco","Haiti","Scotland"],"D":["United States","Paraguay","Australia","Turkey"],"E":["Germany","Curacao","Ivory Coast","Ecuador"],"F":["Netherlands","Japan","Sweden","Tunisia"],"G":["Belgium","Egypt","Iran","New Zealand"],"H":["Spain","Cape Verde","Saudi Arabia","Uruguay"],"I":["France","Senegal","Iraq","Norway"],"J":["Argentina","Algeria","Austria","Jordan"],"K":["Portugal","DR Congo","Uzbekistan","Colombia"],"L":["England","Croatia","Ghana","Panama"]};
+  const elo={"Argentina":2141,"France":2090,"England":2063,"Spain":2048,"Brazil":2038,"Portugal":2020,"Belgium":1985,"Netherlands":1975,"Germany":1970,"Croatia":1950};
+  const preds={};
+  Object.values(groups).flat().forEach(t=>{const e=elo[t]||1750,b=e/2141;preds[t]={r32:1,r16:b*.7,qf:b*.45,sf:b*.28,final:b*.16,winner:b*.1};});
+  const top=Object.entries(preds).sort((a,b)=>b[1].winner-a[1].winner).slice(0,16).map(([team,p])=>({team,...p}));
+  return{generated_at:new Date().toISOString(),simulations:0,elapsed_seconds:0,matches_played:0,matches_remaining:104,groups,elo_ratings:elo,elo_adjustments:{},predictions:preds,top_champions:top,has_fifa_data:false,predictions_fifa:null,top_champions_fifa:null,elo_adjustments_fifa:{},next_matches:[],recent_results:[],squads:{},squads_fifa:null,lesiones:{}};
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>

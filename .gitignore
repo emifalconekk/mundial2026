@@ -1,0 +1,28 @@
+# Generados automáticamente — no hace falta versionar
+data/cache.json
+data/cache.json.tmp
+data/predictions.json
+mundial2026_predictor.html
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Secretos (nunca commitear)
+.env
+*.env
+secrets.txt
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
