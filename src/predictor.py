@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(__file__))
 from fetcher import get_elo_ratings, get_played_matches, get_upcoming_matches
-from model import run_monte_carlo, match_probabilities, DEFAULT_GROUPS, N_SIMULATIONS
+from model import run_monte_carlo, match_probabilities, penca_ev, DEFAULT_GROUPS, N_SIMULATIONS
 
 OUTPUT_JSON   = os.path.join(os.path.dirname(__file__), "../data/predictions.json")
 DASHBOARD_TPL = os.path.join(os.path.dirname(__file__), "../dashboard.html")
@@ -115,11 +115,15 @@ def get_next_matches_with_probs(upcoming, elo_ratings, elo_adjustments=None, n=1
         elo_h = max(1400, elo_ratings.get(home, 1700) + adj.get(home, 0))
         elo_a = max(1400, elo_ratings.get(away, 1700) + adj.get(away, 0))
         probs = match_probabilities(elo_h, elo_a, is_knockout=is_ko)
+        la, lb = probs["lambda_a"], probs["lambda_b"]
+        penca = penca_ev(la, lb)
         result.append({
             "date": date, "stage": stage, "home": home, "away": away,
             "win_home": probs["win_a"], "draw": probs["draw"], "win_away": probs["win_b"],
-            "lambda_home": probs["lambda_a"], "lambda_away": probs["lambda_b"],
+            "lambda_home": la, "lambda_away": lb,
             "top_scorelines": [[f"{s['home']}-{s['away']}", s["prob"]] for s in probs["top_scorelines"]],
+            "penca_m1": penca["best"]["score"],
+            "penca_m1_ev": penca["ev"],
         })
     return result
 

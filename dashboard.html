@@ -39,6 +39,19 @@ main{padding:24px;max-width:1400px;margin:0 auto}
 .prob-l{background:#dc262620;color:#f87171;border:1px solid #dc262640}
 .scoreline-grid{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
 .sc{background:#1e293b;border-radius:5px;padding:3px 8px;font-size:.75rem;color:#94a3b8}
+.penca-bar{margin-top:10px;border-top:1px solid #1e293b;padding-top:10px}
+.penca-row{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.penca-badge{display:inline-flex;align-items:center;gap:5px;background:#16213e;border:1px solid #1d4ed840;border-radius:7px;padding:4px 10px;font-size:.8rem}
+.penca-score{font-weight:800;color:#60a5fa;font-size:1rem}
+.penca-ev{color:#64748b;font-size:.72rem}
+.penca-m2{border-color:#7c3aed40;background:#1a1030}
+.penca-score-m2{color:#a78bfa}
+.penca-input-row{display:flex;gap:6px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.penca-input-row input{width:52px;background:#0f172a;border:1px solid #334155;border-radius:5px;color:#f1f5f9;padding:4px 6px;font-size:.8rem;text-align:center}
+.penca-input-row input::placeholder{color:#475569}
+.penca-toggle{cursor:pointer;font-size:.72rem;color:#475569;margin-top:6px;display:inline-flex;align-items:center;gap:4px;user-select:none}
+.penca-toggle:hover{color:#94a3b8}
+.penca-pool-section{display:none;margin-top:8px}
 .group-table{width:100%;border-collapse:collapse;font-size:.85rem}
 .group-table th{color:#64748b;padding:6px 8px;text-align:left;border-bottom:1px solid #334155}
 .group-table td{padding:7px 8px;border-bottom:1px solid #1e293b}
@@ -342,14 +355,96 @@ function renderFeaturedMatch(){
     </div>`;
 }
 
+// ─── Penca EV calculation (JS, método 2) ────────────────────────────────────
+function pencaEV(la, lb, poolPicks) {
+  // poolPicks: {score: fraction} e.g. {"1-0": 0.67, "2-0": 0.15}
+  const MAX = 7;
+  const poisson = (k, l) => {
+    let v = Math.exp(-l); for(let i=0;i<k;i++) v*=l/(i+1); return v;
+  };
+  const mat = {};
+  for(let ga=0;ga<MAX;ga++) for(let gb=0;gb<MAX;gb++)
+    mat[`${ga}-${gb}`] = poisson(ga,la)*poisson(gb,lb);
+
+  const winner = (a,b) => a>b?1:(a<b?-1:0);
+
+  // EV puro
+  const evPure = {};
+  for(let gp=0;gp<MAX;gp++) for(let gp2=0;gp2<MAX;gp2++) {
+    const key = `${gp}-${gp2}`;
+    const dp = gp-gp2, wp = winner(gp,gp2);
+    let ev = 0;
+    for(let ga=0;ga<MAX;ga++) for(let gb=0;gb<MAX;gb++) {
+      const p = mat[`${ga}-${gb}`];
+      if(ga===gp&&gb===gp2) ev+=8*p;
+      else if(ga-gb===dp) ev+=5*p;
+      else if(winner(ga,gb)===wp) ev+=3*p;
+    }
+    evPure[key] = ev;
+  }
+
+  if(!poolPicks || Object.keys(poolPicks).length===0) {
+    // Método 1
+    return Object.entries(evPure).sort((a,b)=>b[1]-a[1])[0];
+  }
+
+  // Pool EV por resultado
+  const poolEvPerResult = {};
+  for(let ga=0;ga<MAX;ga++) for(let gb=0;gb<MAX;gb++) {
+    const key = `${ga}-${gb}`;
+    let pts = 0;
+    for(const [score, frac] of Object.entries(poolPicks)) {
+      if(frac<=0) continue;
+      const [gp,gp2] = score.split("-").map(Number);
+      if(ga===gp&&gb===gp2) pts+=8*frac;
+      else if(ga-gb===gp-gp2) pts+=5*frac;
+      else if(winner(ga,gb)===winner(gp,gp2)) pts+=3*frac;
+    }
+    poolEvPerResult[key] = pts;
+  }
+  const poolExpected = Object.entries(mat).reduce((s,[k,p])=>s+p*poolEvPerResult[k],0);
+
+  const evRel = {};
+  for(const [key,ev] of Object.entries(evPure))
+    evRel[key] = ev - poolExpected;
+
+  return Object.entries(evRel).sort((a,b)=>b[1]-a[1])[0];
+}
+
+function calcPencaM2(cardId, la, lb) {
+  const card = document.getElementById(cardId);
+  const rows = card.querySelectorAll(".penca-pool-row");
+  const poolPicks = {};
+  let total = 0;
+  rows.forEach(row => {
+    const score = row.querySelector(".pp-score").value.trim();
+    const pct   = parseFloat(row.querySelector(".pp-pct").value) || 0;
+    if(score && pct > 0) { poolPicks[score] = pct/100; total += pct/100; }
+  });
+  const [bestScore, bestEv] = pencaEV(la, lb, poolPicks);
+  const el = card.querySelector(".penca-m2-result");
+  if(el) {
+    el.innerHTML = `
+      <div class="penca-badge penca-m2" style="margin-top:8px">
+        <span style="font-size:.7rem;color:#7c3aed">M2 vs pool</span>
+        <span class="penca-score penca-score-m2">${bestScore}</span>
+        <span class="penca-ev">${bestEv>=0?"+":""}${bestEv.toFixed(2)} pts rel.</span>
+      </div>`;
+  }
+}
+
 function renderMatchesList(){
   const matches = DATA.next_matches||[];
   if(!matches.length){
     document.getElementById("matches-list").innerHTML="<p style='color:#64748b;text-align:center;padding:40px'>Sin partidos próximos</p>";return;
   }
-  document.getElementById("matches-list").innerHTML = matches.map(m=>{
+  document.getElementById("matches-list").innerHTML = matches.map((m,idx)=>{
     const sc = (m.top_scorelines||[]).slice(0,6).map(([s,p])=>`<span class="sc">${s} ${(p*100).toFixed(0)}%</span>`).join("");
-    return `<div class="match-card">
+    const cardId = `match-card-${idx}`;
+    const m1 = m.penca_m1 || "";
+    const m1ev = m.penca_m1_ev != null ? m.penca_m1_ev.toFixed(2) : "";
+    const la = m.lambda_home, lb = m.lambda_away;
+    return `<div class="match-card" id="${cardId}">
       <div style="font-size:.72rem;color:#475569;margin-bottom:6px">${m.date} · ${m.stage.replace(/_/g," ")}</div>
       <div class="match-teams">
         <div class="match-team">${flag(m.home)} ${m.home}</div>
@@ -362,8 +457,48 @@ function renderMatchesList(){
         <div class="prob-pill prob-l">${flag(m.away)} ${pct(m.win_away)}</div>
       </div>
       <div class="scoreline-grid">${sc}</div>
+      <div class="penca-bar">
+        <div class="penca-row">
+          <span style="font-size:.7rem;color:#475569;font-weight:600">🎯 PENCA</span>
+          ${m1 ? `<div class="penca-badge">
+            <span style="font-size:.7rem;color:#475569">M1 EV puro</span>
+            <span class="penca-score">${m1}</span>
+            <span class="penca-ev">${m1ev} pts esp.</span>
+          </div>` : ""}
+          <span class="penca-toggle" onclick="togglePool('${cardId}')">⚙ Ajustar por pool ▾</span>
+        </div>
+        <div class="penca-pool-section" id="pool-${cardId}">
+          <div style="font-size:.72rem;color:#64748b;margin-bottom:6px">Ingresá los marcadores más votados en la Penca:</div>
+          <div id="pool-rows-${cardId}">
+            ${[0,1,2].map(i=>`
+            <div class="penca-input-row penca-pool-row">
+              <input class="pp-score" placeholder="1-0" style="width:46px">
+              <input class="pp-pct" placeholder="%" style="width:44px">
+              <span style="font-size:.72rem;color:#475569">%</span>
+            </div>`).join("")}
+          </div>
+          <div style="display:flex;gap:8px;margin-top:6px;align-items:center">
+            <span class="penca-toggle" onclick="addPoolRow('${cardId}')">+ agregar</span>
+            <button onclick="calcPencaM2('${cardId}',${la},${lb})" style="background:#7c3aed;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:.78rem;cursor:pointer;font-weight:600">Calcular M2</button>
+          </div>
+          <div class="penca-m2-result"></div>
+        </div>
+      </div>
     </div>`;
   }).join("");
+}
+
+function togglePool(cardId) {
+  const el = document.getElementById("pool-"+cardId);
+  el.style.display = el.style.display==="block" ? "none" : "block";
+}
+
+function addPoolRow(cardId) {
+  const container = document.getElementById("pool-rows-"+cardId);
+  const row = document.createElement("div");
+  row.className = "penca-input-row penca-pool-row";
+  row.innerHTML = `<input class="pp-score" placeholder="1-0" style="width:46px"><input class="pp-pct" placeholder="%" style="width:44px"><span style="font-size:.72rem;color:#475569">%</span>`;
+  container.appendChild(row);
 }
 
 function renderGroups(){

@@ -1,1406 +1,372 @@
 {
   "Argentina": [
-    {
-      "name": "Lionel Messi",
-      "pos": "FW",
-      "imp": 90,
-      "fifa_overall": 90
-    },
-    {
-      "name": "Emiliano Martinez",
-      "pos": "GK",
-      "imp": 50,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Lautaro Martinez",
-      "pos": "FW",
-      "imp": 65,
-      "fifa_overall": 87
-    },
-    {
-      "name": "Julian Alvarez",
-      "pos": "FW",
-      "imp": 60,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Rodrigo De Paul",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Alexis Mac Allister",
-      "pos": "MF",
-      "imp": 50,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Enzo Fernandez",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Nicolas Otamendi",
-      "pos": "DF",
-      "imp": 35,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Cristian Romero",
-      "pos": "DF",
-      "imp": 40,
-      "fifa_overall": 85
-    }
+    {"name": "Lionel Messi", "pos": "FW", "imp": 100, "fifa_overall": 91},
+    {"name": "Emiliano Martinez", "pos": "GK", "imp": 75, "fifa_overall": 87},
+    {"name": "Cristian Romero", "pos": "DF", "imp": 70, "fifa_overall": 86},
+    {"name": "Lisandro Martinez", "pos": "DF", "imp": 65, "fifa_overall": 85},
+    {"name": "Enzo Fernandez", "pos": "MF", "imp": 82, "fifa_overall": 84},
+    {"name": "Alexis Mac Allister", "pos": "MF", "imp": 78, "fifa_overall": 83},
+    {"name": "Rodrigo De Paul", "pos": "MF", "imp": 72, "fifa_overall": 82},
+    {"name": "Lautaro Martinez", "pos": "FW", "imp": 87, "fifa_overall": 87},
+    {"name": "Julian Alvarez", "pos": "FW", "imp": 84, "fifa_overall": 85}
   ],
   "France": [
-    {
-      "name": "Kylian Mbappe",
-      "pos": "FW",
-      "imp": 85,
-      "fifa_overall": 91
-    },
-    {
-      "name": "Antoine Griezmann",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Aurelien Tchouameni",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Mike Maignan",
-      "pos": "GK",
-      "imp": 40,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Eduardo Camavinga",
-      "pos": "MF",
-      "imp": 40,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Ousmane Dembele",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 85
-    },
-    {
-      "name": "William Saliba",
-      "pos": "DF",
-      "imp": 45,
-      "fifa_overall": 86
-    },
-    {
-      "name": "Dayot Upamecano",
-      "pos": "DF",
-      "imp": 35,
-      "fifa_overall": 84
-    }
+    {"name": "Kylian Mbappe", "pos": "FW", "imp": 100, "fifa_overall": 92},
+    {"name": "Mike Maignan", "pos": "GK", "imp": 65, "fifa_overall": 86},
+    {"name": "Dayot Upamecano", "pos": "DF", "imp": 63, "fifa_overall": 85},
+    {"name": "William Saliba", "pos": "DF", "imp": 62, "fifa_overall": 85},
+    {"name": "Theo Hernandez", "pos": "DF", "imp": 58, "fifa_overall": 84},
+    {"name": "Aurelien Tchouameni", "pos": "MF", "imp": 72, "fifa_overall": 85},
+    {"name": "N'Golo Kante", "pos": "MF", "imp": 70, "fifa_overall": 84},
+    {"name": "Ousmane Dembele", "pos": "FW", "imp": 78, "fifa_overall": 87},
+    {"name": "Marcus Thuram", "pos": "FW", "imp": 65, "fifa_overall": 83}
   ],
   "England": [
-    {
-      "name": "Jude Bellingham",
-      "pos": "MF",
-      "imp": 75,
-      "fifa_overall": 88
-    },
-    {
-      "name": "Harry Kane",
-      "pos": "FW",
-      "imp": 70,
-      "fifa_overall": 90
-    },
-    {
-      "name": "Bukayo Saka",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 86
-    },
-    {
-      "name": "Phil Foden",
-      "pos": "MF",
-      "imp": 55,
-      "fifa_overall": 88
-    },
-    {
-      "name": "Jordan Pickford",
-      "pos": "GK",
-      "imp": 35,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Declan Rice",
-      "pos": "MF",
-      "imp": 50,
-      "fifa_overall": 86
-    },
-    {
-      "name": "Kyle Walker",
-      "pos": "DF",
-      "imp": 30,
-      "fifa_overall": 82
-    }
+    {"name": "Harry Kane", "pos": "FW", "imp": 95, "fifa_overall": 88},
+    {"name": "Jude Bellingham", "pos": "MF", "imp": 93, "fifa_overall": 91},
+    {"name": "Bukayo Saka", "pos": "FW", "imp": 85, "fifa_overall": 87},
+    {"name": "Jordan Pickford", "pos": "GK", "imp": 65, "fifa_overall": 83},
+    {"name": "Declan Rice", "pos": "MF", "imp": 80, "fifa_overall": 86},
+    {"name": "John Stones", "pos": "DF", "imp": 60, "fifa_overall": 84},
+    {"name": "Marc Guehi", "pos": "DF", "imp": 55, "fifa_overall": 82},
+    {"name": "Kobbie Mainoo", "pos": "MF", "imp": 60, "fifa_overall": 81}
   ],
   "Spain": [
-    {
-      "name": "Lamine Yamal",
-      "pos": "FW",
-      "imp": 70,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Pedri",
-      "pos": "MF",
-      "imp": 60,
-      "fifa_overall": 86
-    },
-    {
-      "name": "Rodri",
-      "pos": "MF",
-      "imp": 65,
-      "fifa_overall": 91
-    },
-    {
-      "name": "Dani Olmo",
-      "pos": "MF",
-      "imp": 50,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Alvaro Morata",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Unai Simon",
-      "pos": "GK",
-      "imp": 35,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Aymeric Laporte",
-      "pos": "DF",
-      "imp": 35,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Nico Williams",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 83
-    }
+    {"name": "Lamine Yamal", "pos": "FW", "imp": 92, "fifa_overall": 87},
+    {"name": "Pedri", "pos": "MF", "imp": 88, "fifa_overall": 87},
+    {"name": "Rodri", "pos": "MF", "imp": 85, "fifa_overall": 91},
+    {"name": "Unai Simon", "pos": "GK", "imp": 60, "fifa_overall": 83},
+    {"name": "Nico Williams", "pos": "FW", "imp": 82, "fifa_overall": 85},
+    {"name": "Dani Olmo", "pos": "MF", "imp": 80, "fifa_overall": 86},
+    {"name": "Fabian Ruiz", "pos": "MF", "imp": 72, "fifa_overall": 84},
+    {"name": "Aymeric Laporte", "pos": "DF", "imp": 60, "fifa_overall": 83}
   ],
   "Brazil": [
-    {
-      "name": "Vinicius Jr",
-      "pos": "FW",
-      "imp": 80,
-      "fifa_overall": 91
-    },
-    {
-      "name": "Rodrygo",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Bruno Guimaraes",
-      "pos": "MF",
-      "imp": 55,
-      "fifa_overall": 86
-    },
-    {
-      "name": "Marquinhos",
-      "pos": "DF",
-      "imp": 45,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Alisson",
-      "pos": "GK",
-      "imp": 45,
-      "fifa_overall": 89
-    },
-    {
-      "name": "Raphinha",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Endrick",
-      "pos": "FW",
-      "imp": 45,
-      "fifa_overall": 78
-    }
+    {"name": "Vinicius Junior", "pos": "FW", "imp": 96, "fifa_overall": 90},
+    {"name": "Alisson", "pos": "GK", "imp": 75, "fifa_overall": 89},
+    {"name": "Marquinhos", "pos": "DF", "imp": 70, "fifa_overall": 86},
+    {"name": "Bruno Guimaraes", "pos": "MF", "imp": 80, "fifa_overall": 86},
+    {"name": "Raphinha", "pos": "FW", "imp": 82, "fifa_overall": 85},
+    {"name": "Rodrygo", "pos": "FW", "imp": 72, "fifa_overall": 84},
+    {"name": "Lucas Paqueta", "pos": "MF", "imp": 75, "fifa_overall": 84},
+    {"name": "Neymar", "pos": "FW", "imp": 78, "fifa_overall": 83},
+    {"name": "Endrick", "pos": "FW", "imp": 60, "fifa_overall": 80}
   ],
   "Portugal": [
-    {
-      "name": "Bruno Fernandes",
-      "pos": "MF",
-      "imp": 65,
-      "fifa_overall": 86
-    },
-    {
-      "name": "Bernardo Silva",
-      "pos": "MF",
-      "imp": 60,
-      "fifa_overall": 87
-    },
-    {
-      "name": "Cristiano Ronaldo",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Ruben Dias",
-      "pos": "DF",
-      "imp": 50,
-      "fifa_overall": 88
-    },
-    {
-      "name": "Rafael Leao",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 86
-    },
-    {
-      "name": "Diogo Costa",
-      "pos": "GK",
-      "imp": 40,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Joao Neves",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 83
-    }
+    {"name": "Cristiano Ronaldo", "pos": "FW", "imp": 88, "fifa_overall": 84},
+    {"name": "Bruno Fernandes", "pos": "MF", "imp": 92, "fifa_overall": 88},
+    {"name": "Bernardo Silva", "pos": "MF", "imp": 88, "fifa_overall": 88},
+    {"name": "Diogo Costa", "pos": "GK", "imp": 65, "fifa_overall": 85},
+    {"name": "Ruben Dias", "pos": "DF", "imp": 72, "fifa_overall": 88},
+    {"name": "Rafael Leao", "pos": "FW", "imp": 82, "fifa_overall": 87},
+    {"name": "Joao Neves", "pos": "MF", "imp": 78, "fifa_overall": 84},
+    {"name": "Goncalo Ramos", "pos": "FW", "imp": 72, "fifa_overall": 83}
   ],
   "Germany": [
-    {
-      "name": "Florian Wirtz",
-      "pos": "MF",
-      "imp": 75,
-      "fifa_overall": 87
-    },
-    {
-      "name": "Jamal Musiala",
-      "pos": "MF",
-      "imp": 70,
-      "fifa_overall": 87
-    },
-    {
-      "name": "Joshua Kimmich",
-      "pos": "MF",
-      "imp": 55,
-      "fifa_overall": 87
-    },
-    {
-      "name": "Kai Havertz",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Manuel Neuer",
-      "pos": "GK",
-      "imp": 40,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Leroy Sane",
-      "pos": "FW",
-      "imp": 45,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Antonio Rudiger",
-      "pos": "DF",
-      "imp": 45,
-      "fifa_overall": 84
-    }
+    {"name": "Florian Wirtz", "pos": "MF", "imp": 92, "fifa_overall": 88},
+    {"name": "Jamal Musiala", "pos": "MF", "imp": 90, "fifa_overall": 87},
+    {"name": "Manuel Neuer", "pos": "GK", "imp": 70, "fifa_overall": 85},
+    {"name": "Antonio Rudiger", "pos": "DF", "imp": 68, "fifa_overall": 85},
+    {"name": "Joshua Kimmich", "pos": "MF", "imp": 82, "fifa_overall": 87},
+    {"name": "Kai Havertz", "pos": "FW", "imp": 80, "fifa_overall": 85},
+    {"name": "Leroy Sane", "pos": "FW", "imp": 75, "fifa_overall": 84}
   ],
   "Netherlands": [
-    {
-      "name": "Virgil van Dijk",
-      "pos": "DF",
-      "imp": 60,
-      "fifa_overall": 89
-    },
-    {
-      "name": "Cody Gakpo",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Xavi Simons",
-      "pos": "MF",
-      "imp": 50,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Tijjani Reijnders",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Memphis Depay",
-      "pos": "FW",
-      "imp": 35,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Bart Verbruggen",
-      "pos": "GK",
-      "imp": 35,
-      "fifa_overall": 80
-    }
+    {"name": "Virgil van Dijk", "pos": "DF", "imp": 88, "fifa_overall": 89},
+    {"name": "Cody Gakpo", "pos": "FW", "imp": 85, "fifa_overall": 85},
+    {"name": "Frenkie de Jong", "pos": "MF", "imp": 85, "fifa_overall": 87},
+    {"name": "Jurrien Timber", "pos": "DF", "imp": 70, "fifa_overall": 84},
+    {"name": "Memphis Depay", "pos": "FW", "imp": 72, "fifa_overall": 82},
+    {"name": "Ryan Gravenberch", "pos": "MF", "imp": 78, "fifa_overall": 84},
+    {"name": "Teun Koopmeijners", "pos": "MF", "imp": 75, "fifa_overall": 84}
   ],
   "Belgium": [
-    {
-      "name": "Kevin De Bruyne",
-      "pos": "MF",
-      "imp": 75,
-      "fifa_overall": 88
-    },
-    {
-      "name": "Romelu Lukaku",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Thibaut Courtois",
-      "pos": "GK",
-      "imp": 60,
-      "fifa_overall": 89
-    },
-    {
-      "name": "Jeremy Doku",
-      "pos": "FW",
-      "imp": 45,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Axel Witsel",
-      "pos": "MF",
-      "imp": 30,
-      "fifa_overall": 80
-    },
-    {
-      "name": "Amadou Onana",
-      "pos": "MF",
-      "imp": 40,
-      "fifa_overall": 82
-    }
+    {"name": "Kevin De Bruyne", "pos": "MF", "imp": 96, "fifa_overall": 88},
+    {"name": "Thibaut Courtois", "pos": "GK", "imp": 78, "fifa_overall": 89},
+    {"name": "Romelu Lukaku", "pos": "FW", "imp": 88, "fifa_overall": 84},
+    {"name": "Amadou Onana", "pos": "MF", "imp": 72, "fifa_overall": 83},
+    {"name": "Jeremy Doku", "pos": "FW", "imp": 78, "fifa_overall": 84},
+    {"name": "Youri Tielemans", "pos": "MF", "imp": 70, "fifa_overall": 82},
+    {"name": "Charles De Ketelaere", "pos": "FW", "imp": 68, "fifa_overall": 83}
   ],
   "Croatia": [
-    {
-      "name": "Luka Modric",
-      "pos": "MF",
-      "imp": 70,
-      "fifa_overall": 86
-    },
-    {
-      "name": "Mateo Kovacic",
-      "pos": "MF",
-      "imp": 55,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Dominik Livakovic",
-      "pos": "GK",
-      "imp": 45,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Ivan Perisic",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Josko Gvardiol",
-      "pos": "DF",
-      "imp": 55,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Marcelo Brozovic",
-      "pos": "MF",
-      "imp": 40,
-      "fifa_overall": 83
-    }
+    {"name": "Luka Modric", "pos": "MF", "imp": 92, "fifa_overall": 83},
+    {"name": "Josko Gvardiol", "pos": "DF", "imp": 82, "fifa_overall": 87},
+    {"name": "Mateo Kovacic", "pos": "MF", "imp": 80, "fifa_overall": 85},
+    {"name": "Andrej Kramaric", "pos": "FW", "imp": 78, "fifa_overall": 83},
+    {"name": "Dominik Livakovic", "pos": "GK", "imp": 65, "fifa_overall": 84},
+    {"name": "Ivan Perisic", "pos": "FW", "imp": 65, "fifa_overall": 80},
+    {"name": "Mario Pasalic", "pos": "MF", "imp": 60, "fifa_overall": 81}
   ],
   "Uruguay": [
-    {
-      "name": "Federico Valverde",
-      "pos": "MF",
-      "imp": 70,
-      "fifa_overall": 87
-    },
-    {
-      "name": "Darwin Nunez",
-      "pos": "FW",
-      "imp": 60,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Ronald Araujo",
-      "pos": "DF",
-      "imp": 55,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Jose Gimenez",
-      "pos": "DF",
-      "imp": 45,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Rodrigo Bentancur",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Sebastian Caceres",
-      "pos": "DF",
-      "imp": 30,
-      "fifa_overall": 77
-    }
+    {"name": "Federico Valverde", "pos": "MF", "imp": 92, "fifa_overall": 88},
+    {"name": "Darwin Nunez", "pos": "FW", "imp": 88, "fifa_overall": 85},
+    {"name": "Ronald Araujo", "pos": "DF", "imp": 75, "fifa_overall": 87},
+    {"name": "Rodrigo Bentancur", "pos": "MF", "imp": 72, "fifa_overall": 83},
+    {"name": "Giorgian de Arrascaeta", "pos": "MF", "imp": 80, "fifa_overall": 84},
+    {"name": "Manuel Ugarte", "pos": "MF", "imp": 75, "fifa_overall": 83},
+    {"name": "Fernando Muslera", "pos": "GK", "imp": 60, "fifa_overall": 78}
   ],
   "Colombia": [
-    {
-      "name": "Luis Diaz",
-      "pos": "FW",
-      "imp": 65,
-      "fifa_overall": 83
-    },
-    {
-      "name": "James Rodriguez",
-      "pos": "MF",
-      "imp": 50,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Jhon Duran",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 80
-    },
-    {
-      "name": "Davinson Sanchez",
-      "pos": "DF",
-      "imp": 40,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Jefferson Lerma",
-      "pos": "MF",
-      "imp": 35,
-      "fifa_overall": 79
-    },
-    {
-      "name": "Camilo Vargas",
-      "pos": "GK",
-      "imp": 30,
-      "fifa_overall": 78
-    }
+    {"name": "James Rodriguez", "pos": "MF", "imp": 85, "fifa_overall": 83},
+    {"name": "Luis Diaz", "pos": "FW", "imp": 90, "fifa_overall": 85},
+    {"name": "David Ospina", "pos": "GK", "imp": 65, "fifa_overall": 80},
+    {"name": "Davinson Sanchez", "pos": "DF", "imp": 60, "fifa_overall": 81},
+    {"name": "Yerry Mina", "pos": "DF", "imp": 55, "fifa_overall": 80},
+    {"name": "Richard Rios", "pos": "MF", "imp": 72, "fifa_overall": 80},
+    {"name": "Daniel Munoz", "pos": "DF", "imp": 58, "fifa_overall": 80}
   ],
   "Norway": [
-    {
-      "name": "Erling Haaland",
-      "pos": "FW",
-      "imp": 85,
-      "fifa_overall": 91
-    },
-    {
-      "name": "Martin Odegaard",
-      "pos": "MF",
-      "imp": 70,
-      "fifa_overall": 88
-    },
-    {
-      "name": "Alexander Sorloth",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Sander Berge",
-      "pos": "MF",
-      "imp": 35,
-      "fifa_overall": 79
-    }
+    {"name": "Erling Haaland", "pos": "FW", "imp": 100, "fifa_overall": 94},
+    {"name": "Martin Odegaard", "pos": "MF", "imp": 90, "fifa_overall": 88},
+    {"name": "Alexander Sorloth", "pos": "FW", "imp": 65, "fifa_overall": 82},
+    {"name": "Sander Berge", "pos": "MF", "imp": 62, "fifa_overall": 81},
+    {"name": "Kristoffer Ajer", "pos": "DF", "imp": 55, "fifa_overall": 79},
+    {"name": "Antonio Nusa", "pos": "FW", "imp": 60, "fifa_overall": 79}
   ],
   "Mexico": [
-    {
-      "name": "Santiago Gimenez",
-      "pos": "FW",
-      "imp": 60,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Hirving Lozano",
-      "pos": "FW",
-      "imp": 45,
-      "fifa_overall": 80
-    },
-    {
-      "name": "Edson Alvarez",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Guillermo Ochoa",
-      "pos": "GK",
-      "imp": 35,
-      "fifa_overall": 79
-    },
-    {
-      "name": "Alexis Vega",
-      "pos": "FW",
-      "imp": 30,
-      "fifa_overall": 76
-    }
+    {"name": "Santiago Gimenez", "pos": "FW", "imp": 88, "fifa_overall": 82},
+    {"name": "Edson Alvarez", "pos": "MF", "imp": 82, "fifa_overall": 82},
+    {"name": "Guillermo Ochoa", "pos": "GK", "imp": 68, "fifa_overall": 78},
+    {"name": "Raul Jimenez", "pos": "FW", "imp": 72, "fifa_overall": 79},
+    {"name": "Cesar Montes", "pos": "DF", "imp": 55, "fifa_overall": 78},
+    {"name": "Luis Chavez", "pos": "MF", "imp": 62, "fifa_overall": 78}
   ],
   "United States": [
-    {
-      "name": "Christian Pulisic",
-      "pos": "FW",
-      "imp": 70,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Gio Reyna",
-      "pos": "MF",
-      "imp": 50,
-      "fifa_overall": 77
-    },
-    {
-      "name": "Tyler Adams",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 79
-    },
-    {
-      "name": "Ricardo Pepi",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 76
-    },
-    {
-      "name": "Matt Turner",
-      "pos": "GK",
-      "imp": 30,
-      "fifa_overall": 78
-    },
-    {
-      "name": "Weston McKennie",
-      "pos": "MF",
-      "imp": 40,
-      "fifa_overall": 79
-    }
+    {"name": "Christian Pulisic", "pos": "MF", "imp": 88, "fifa_overall": 82},
+    {"name": "Gio Reyna", "pos": "FW", "imp": 80, "fifa_overall": 80},
+    {"name": "Weston McKennie", "pos": "MF", "imp": 72, "fifa_overall": 80},
+    {"name": "Tyler Adams", "pos": "MF", "imp": 70, "fifa_overall": 79},
+    {"name": "Ricardo Pepi", "pos": "FW", "imp": 68, "fifa_overall": 78},
+    {"name": "Brenden Aaronson", "pos": "MF", "imp": 58, "fifa_overall": 77},
+    {"name": "Antonee Robinson", "pos": "DF", "imp": 55, "fifa_overall": 78}
   ],
   "Switzerland": [
-    {
-      "name": "Granit Xhaka",
-      "pos": "MF",
-      "imp": 55,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Xherdan Shaqiri",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 79
-    },
-    {
-      "name": "Yann Sommer",
-      "pos": "GK",
-      "imp": 45,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Manuel Akanji",
-      "pos": "DF",
-      "imp": 45,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Ruben Vargas",
-      "pos": "FW",
-      "imp": 35,
-      "fifa_overall": 78
-    }
+    {"name": "Granit Xhaka", "pos": "MF", "imp": 88, "fifa_overall": 82},
+    {"name": "Breel Embolo", "pos": "FW", "imp": 80, "fifa_overall": 80},
+    {"name": "Gregor Kobel", "pos": "GK", "imp": 65, "fifa_overall": 82},
+    {"name": "Manuel Akanji", "pos": "DF", "imp": 68, "fifa_overall": 83},
+    {"name": "Remo Freuler", "pos": "MF", "imp": 65, "fifa_overall": 80},
+    {"name": "Noah Okafor", "pos": "FW", "imp": 62, "fifa_overall": 79},
+    {"name": "Dan Ndoye", "pos": "FW", "imp": 60, "fifa_overall": 79}
   ],
   "Sweden": [
-    {
-      "name": "Viktor Gyokeres",
-      "pos": "FW",
-      "imp": 75,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Dejan Kulusevski",
-      "pos": "MF",
-      "imp": 55,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Alexander Isak",
-      "pos": "FW",
-      "imp": 65,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Emil Krafth",
-      "pos": "DF",
-      "imp": 25,
-      "fifa_overall": 73
-    }
+    {"name": "Alexander Isak", "pos": "FW", "imp": 90, "fifa_overall": 85},
+    {"name": "Viktor Gyokeres", "pos": "FW", "imp": 88, "fifa_overall": 84},
+    {"name": "Victor Lindelof", "pos": "DF", "imp": 60, "fifa_overall": 80},
+    {"name": "Dejan Kulusevski", "pos": "MF", "imp": 62, "fifa_overall": 82},
+    {"name": "Lucas Bergvall", "pos": "MF", "imp": 65, "fifa_overall": 78},
+    {"name": "Anthony Elanga", "pos": "FW", "imp": 58, "fifa_overall": 78}
   ],
   "Senegal": [
-    {
-      "name": "Sadio Mane",
-      "pos": "FW",
-      "imp": 70,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Pape Gueye",
-      "pos": "MF",
-      "imp": 35,
-      "fifa_overall": 77
-    },
-    {
-      "name": "Edouard Mendy",
-      "pos": "GK",
-      "imp": 40,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Kalidou Koulibaly",
-      "pos": "DF",
-      "imp": 45,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Ismaila Sarr",
-      "pos": "FW",
-      "imp": 45,
-      "fifa_overall": 80
-    }
+    {"name": "Sadio Mane", "pos": "FW", "imp": 92, "fifa_overall": 82},
+    {"name": "Edouard Mendy", "pos": "GK", "imp": 65, "fifa_overall": 82},
+    {"name": "Kalidou Koulibaly", "pos": "DF", "imp": 72, "fifa_overall": 83},
+    {"name": "Pape Matar Sarr", "pos": "MF", "imp": 75, "fifa_overall": 81},
+    {"name": "Ismaila Sarr", "pos": "FW", "imp": 72, "fifa_overall": 80},
+    {"name": "Nicolas Jackson", "pos": "FW", "imp": 70, "fifa_overall": 80},
+    {"name": "Lamine Camara", "pos": "MF", "imp": 65, "fifa_overall": 78}
   ],
   "Morocco": [
-    {
-      "name": "Achraf Hakimi",
-      "pos": "DF",
-      "imp": 65,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Hakim Ziyech",
-      "pos": "MF",
-      "imp": 55,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Yassine Bounou",
-      "pos": "GK",
-      "imp": 50,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Sofyan Amrabat",
-      "pos": "MF",
-      "imp": 50,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Azzedine Ounahi",
-      "pos": "MF",
-      "imp": 40,
-      "fifa_overall": 78
-    }
+    {"name": "Achraf Hakimi", "pos": "DF", "imp": 90, "fifa_overall": 87},
+    {"name": "Sofyan Amrabat", "pos": "MF", "imp": 78, "fifa_overall": 82},
+    {"name": "Yassine Bounou", "pos": "GK", "imp": 72, "fifa_overall": 84},
+    {"name": "Nayef Aguerd", "pos": "DF", "imp": 65, "fifa_overall": 82},
+    {"name": "Hakim Ziyech", "pos": "MF", "imp": 68, "fifa_overall": 80},
+    {"name": "Bilal El Khannouss", "pos": "MF", "imp": 70, "fifa_overall": 79},
+    {"name": "Ayoub El Kaabi", "pos": "FW", "imp": 72, "fifa_overall": 79}
   ],
   "Japan": [
-    {
-      "name": "Takefusa Kubo",
-      "pos": "FW",
-      "imp": 60,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Wataru Endo",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 80
-    },
-    {
-      "name": "Ritsu Doan",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 80
-    },
-    {
-      "name": "Ayase Ueda",
-      "pos": "FW",
-      "imp": 45,
-      "fifa_overall": 78
-    },
-    {
-      "name": "Machida Koki",
-      "pos": "DF",
-      "imp": 30,
-      "fifa_overall": 73
-    }
+    {"name": "Takefusa Kubo", "pos": "FW", "imp": 88, "fifa_overall": 82},
+    {"name": "Wataru Endo", "pos": "MF", "imp": 80, "fifa_overall": 81},
+    {"name": "Ritsu Doan", "pos": "FW", "imp": 75, "fifa_overall": 80},
+    {"name": "Zion Suzuki", "pos": "GK", "imp": 60, "fifa_overall": 78},
+    {"name": "Ko Itakura", "pos": "DF", "imp": 62, "fifa_overall": 79},
+    {"name": "Daichi Kamada", "pos": "MF", "imp": 72, "fifa_overall": 80},
+    {"name": "Ao Tanaka", "pos": "MF", "imp": 65, "fifa_overall": 78}
   ],
   "South Korea": [
-    {
-      "name": "Son Heung-min",
-      "pos": "FW",
-      "imp": 75,
-      "fifa_overall": 86
-    },
-    {
-      "name": "Lee Kang-in",
-      "pos": "MF",
-      "imp": 55,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Kim Min-jae",
-      "pos": "DF",
-      "imp": 60,
-      "fifa_overall": 85
-    },
-    {
-      "name": "Hwang Hee-chan",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 78
-    }
-  ],
-  "Scotland": [
-    {
-      "name": "Andrew Robertson",
-      "pos": "DF",
-      "imp": 55,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Scott McTominay",
-      "pos": "MF",
-      "imp": 55,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Kieran Tierney",
-      "pos": "DF",
-      "imp": 35,
-      "fifa_overall": 79
-    },
-    {
-      "name": "Che Adams",
-      "pos": "FW",
-      "imp": 35,
-      "fifa_overall": 76
-    }
+    {"name": "Son Heung-min", "pos": "FW", "imp": 96, "fifa_overall": 87},
+    {"name": "Kim Min-jae", "pos": "DF", "imp": 80, "fifa_overall": 87},
+    {"name": "Lee Kang-in", "pos": "MF", "imp": 78, "fifa_overall": 82},
+    {"name": "Hwang Hee-chan", "pos": "FW", "imp": 65, "fifa_overall": 80},
+    {"name": "Hwang In-beom", "pos": "MF", "imp": 62, "fifa_overall": 78},
+    {"name": "Kim Seung-Gyu", "pos": "GK", "imp": 55, "fifa_overall": 77}
   ],
   "Australia": [
-    {
-      "name": "Mathew Ryan",
-      "pos": "GK",
-      "imp": 40,
-      "fifa_overall": 78
-    },
-    {
-      "name": "Ajdin Hrustic",
-      "pos": "MF",
-      "imp": 35,
-      "fifa_overall": 75
-    },
-    {
-      "name": "Mitchell Duke",
-      "pos": "FW",
-      "imp": 35,
-      "fifa_overall": 72
-    },
-    {
-      "name": "Aziz Behich",
-      "pos": "DF",
-      "imp": 25,
-      "fifa_overall": 71
-    }
+    {"name": "Nestory Irankunda", "pos": "FW", "imp": 72, "fifa_overall": 76},
+    {"name": "Mathew Ryan", "pos": "GK", "imp": 60, "fifa_overall": 76},
+    {"name": "Jackson Irvine", "pos": "MF", "imp": 68, "fifa_overall": 76},
+    {"name": "Ajdin Hrustic", "pos": "MF", "imp": 65, "fifa_overall": 75},
+    {"name": "Mathew Leckie", "pos": "FW", "imp": 60, "fifa_overall": 74},
+    {"name": "Awer Mabil", "pos": "FW", "imp": 58, "fifa_overall": 74}
   ],
   "Turkey": [
-    {
-      "name": "Arda Guler",
-      "pos": "MF",
-      "imp": 65,
-      "fifa_overall": 80
-    },
-    {
-      "name": "Hakan Calhanoglu",
-      "pos": "MF",
-      "imp": 60,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Kenan Yildiz",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 78
-    },
-    {
-      "name": "Merih Demiral",
-      "pos": "DF",
-      "imp": 40,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Ugurcan Cakir",
-      "pos": "GK",
-      "imp": 35,
-      "fifa_overall": 79
-    }
+    {"name": "Hakan Calhanoglu", "pos": "MF", "imp": 90, "fifa_overall": 84},
+    {"name": "Arda Guler", "pos": "MF", "imp": 85, "fifa_overall": 82},
+    {"name": "Kenan Yildiz", "pos": "FW", "imp": 78, "fifa_overall": 79},
+    {"name": "Ugurcan Cakir", "pos": "GK", "imp": 60, "fifa_overall": 79},
+    {"name": "Zeki Celik", "pos": "DF", "imp": 55, "fifa_overall": 78},
+    {"name": "Caglar Soyuncu", "pos": "DF", "imp": 58, "fifa_overall": 79}
   ],
   "Czechia": [
-    {
-      "name": "Patrik Schick",
-      "pos": "FW",
-      "imp": 60,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Tomas Soucek",
-      "pos": "MF",
-      "imp": 55,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Vladimir Coufal",
-      "pos": "DF",
-      "imp": 30,
-      "fifa_overall": 77
-    },
-    {
-      "name": "Antonin Barak",
-      "pos": "MF",
-      "imp": 35,
-      "fifa_overall": 77
-    }
+    {"name": "Tomas Soucek", "pos": "MF", "imp": 85, "fifa_overall": 82},
+    {"name": "Patrik Schick", "pos": "FW", "imp": 82, "fifa_overall": 81},
+    {"name": "Adam Hlozek", "pos": "FW", "imp": 72, "fifa_overall": 79},
+    {"name": "Matej Kovar", "pos": "GK", "imp": 60, "fifa_overall": 78},
+    {"name": "Vladimir Coufal", "pos": "DF", "imp": 55, "fifa_overall": 77},
+    {"name": "Ladislav Krejci", "pos": "DF", "imp": 58, "fifa_overall": 78}
   ],
   "Canada": [
-    {
-      "name": "Alphonso Davies",
-      "pos": "DF",
-      "imp": 70,
-      "fifa_overall": 84
-    },
-    {
-      "name": "Jonathan David",
-      "pos": "FW",
-      "imp": 65,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Tajon Buchanan",
-      "pos": "FW",
-      "imp": 45,
-      "fifa_overall": 78
-    },
-    {
-      "name": "Stephen Eustaquio",
-      "pos": "MF",
-      "imp": 40,
-      "fifa_overall": 77
-    },
-    {
-      "name": "Milan Borjan",
-      "pos": "GK",
-      "imp": 35,
-      "fifa_overall": 78
-    }
+    {"name": "Alphonso Davies", "pos": "DF", "imp": 88, "fifa_overall": 84},
+    {"name": "Jonathan David", "pos": "FW", "imp": 90, "fifa_overall": 84},
+    {"name": "Stephen Eustaquio", "pos": "MF", "imp": 75, "fifa_overall": 78},
+    {"name": "Tajon Buchanan", "pos": "MF", "imp": 68, "fifa_overall": 78},
+    {"name": "Ismael Kone", "pos": "MF", "imp": 65, "fifa_overall": 77},
+    {"name": "Dayne St Clair", "pos": "GK", "imp": 55, "fifa_overall": 76}
   ],
   "Austria": [
-    {
-      "name": "Marcel Sabitzer",
-      "pos": "MF",
-      "imp": 55,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Marko Arnautovic",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 80
-    },
-    {
-      "name": "David Alaba",
-      "pos": "DF",
-      "imp": 60,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Christoph Baumgartner",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 79
-    }
+    {"name": "David Alaba", "pos": "DF", "imp": 78, "fifa_overall": 83},
+    {"name": "Marcel Sabitzer", "pos": "MF", "imp": 80, "fifa_overall": 81},
+    {"name": "Christoph Baumgartner", "pos": "MF", "imp": 75, "fifa_overall": 80},
+    {"name": "Xaver Schlager", "pos": "MF", "imp": 72, "fifa_overall": 80},
+    {"name": "Marko Arnautovic", "pos": "FW", "imp": 70, "fifa_overall": 78},
+    {"name": "Konrad Laimer", "pos": "MF", "imp": 68, "fifa_overall": 80}
   ],
   "Ecuador": [
-    {
-      "name": "Enner Valencia",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 77
-    },
-    {
-      "name": "Moises Caicedo",
-      "pos": "MF",
-      "imp": 65,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Jeremy Sarmiento",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 75
-    },
-    {
-      "name": "Piero Hincapie",
-      "pos": "DF",
-      "imp": 45,
-      "fifa_overall": 78
-    }
+    {"name": "Moises Caicedo", "pos": "MF", "imp": 88, "fifa_overall": 83},
+    {"name": "Enner Valencia", "pos": "FW", "imp": 75, "fifa_overall": 77},
+    {"name": "Piero Hincapie", "pos": "DF", "imp": 70, "fifa_overall": 81},
+    {"name": "Gonzalo Plata", "pos": "FW", "imp": 65, "fifa_overall": 78},
+    {"name": "Pervis Estupinan", "pos": "DF", "imp": 62, "fifa_overall": 80},
+    {"name": "Kendry Paez", "pos": "MF", "imp": 68, "fifa_overall": 77}
   ],
   "Egypt": [
-    {
-      "name": "Mohamed Salah",
-      "pos": "FW",
-      "imp": 85,
-      "fifa_overall": 88
-    },
-    {
-      "name": "Mohamed El-Shenawy",
-      "pos": "GK",
-      "imp": 35,
-      "fifa_overall": 79
-    },
-    {
-      "name": "Trezeguet",
-      "pos": "FW",
-      "imp": 35,
-      "fifa_overall": 76
-    },
-    {
-      "name": "Omar Marmoush",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 82
-    }
+    {"name": "Mohamed Salah", "pos": "FW", "imp": 100, "fifa_overall": 89},
+    {"name": "Omar Marmoush", "pos": "FW", "imp": 78, "fifa_overall": 83},
+    {"name": "Mohamed El Shenawy", "pos": "GK", "imp": 60, "fifa_overall": 77},
+    {"name": "Emam Ashour", "pos": "MF", "imp": 60, "fifa_overall": 76},
+    {"name": "Mohamed Hany", "pos": "DF", "imp": 52, "fifa_overall": 74}
   ],
   "Algeria": [
-    {
-      "name": "Riyad Mahrez",
-      "pos": "FW",
-      "imp": 65,
-      "fifa_overall": 83
-    },
-    {
-      "name": "Islam Slimani",
-      "pos": "FW",
-      "imp": 35,
-      "fifa_overall": 75
-    },
-    {
-      "name": "Sofiane Feghouli",
-      "pos": "MF",
-      "imp": 30,
-      "fifa_overall": 73
-    },
-    {
-      "name": "Said Benrahma",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 79
-    }
+    {"name": "Riyad Mahrez", "pos": "FW", "imp": 90, "fifa_overall": 83},
+    {"name": "Mohamed Amoura", "pos": "FW", "imp": 78, "fifa_overall": 79},
+    {"name": "Houssem Aouar", "pos": "MF", "imp": 65, "fifa_overall": 78},
+    {"name": "Nabil Bentaleb", "pos": "MF", "imp": 60, "fifa_overall": 77},
+    {"name": "Ramy Bensebaini", "pos": "DF", "imp": 58, "fifa_overall": 79},
+    {"name": "Ibrahim Maza", "pos": "MF", "imp": 62, "fifa_overall": 76}
   ],
   "Tunisia": [
-    {
-      "name": "Wahbi Khazri",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 76
-    },
-    {
-      "name": "Youssef Msakni",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 75
-    },
-    {
-      "name": "Hannibal Mejbri",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 77
-    }
+    {"name": "Ellyes Shkiri", "pos": "MF", "imp": 75, "fifa_overall": 77},
+    {"name": "Hannibal Mejbri", "pos": "MF", "imp": 70, "fifa_overall": 77},
+    {"name": "Aymen Dahmen", "pos": "GK", "imp": 55, "fifa_overall": 74},
+    {"name": "Anis Ben Slimane", "pos": "MF", "imp": 60, "fifa_overall": 75},
+    {"name": "Montassar Talbi", "pos": "DF", "imp": 50, "fifa_overall": 74}
   ],
   "Ghana": [
-    {
-      "name": "Mohammed Kudus",
-      "pos": "MF",
-      "imp": 65,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Jordan Ayew",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 77
-    },
-    {
-      "name": "Thomas Partey",
-      "pos": "MF",
-      "imp": 55,
-      "fifa_overall": 82
-    },
-    {
-      "name": "Antoine Semenyo",
-      "pos": "FW",
-      "imp": 45,
-      "fifa_overall": 78
-    }
+    {"name": "Thomas Partey", "pos": "MF", "imp": 88, "fifa_overall": 82},
+    {"name": "Inaki Williams", "pos": "FW", "imp": 80, "fifa_overall": 80},
+    {"name": "Antoine Semenyo", "pos": "FW", "imp": 72, "fifa_overall": 78},
+    {"name": "Kamaldeen Sulemana", "pos": "FW", "imp": 65, "fifa_overall": 77},
+    {"name": "Abdul Fatawu", "pos": "FW", "imp": 60, "fifa_overall": 75},
+    {"name": "Mohammed Salisu", "pos": "DF", "imp": 55, "fifa_overall": 76}
   ],
   "Ivory Coast": [
-    {
-      "name": "Sebastien Haller",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 79
-    },
-    {
-      "name": "Franck Kessie",
-      "pos": "MF",
-      "imp": 50,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Nicolas Pepe",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 78
-    },
-    {
-      "name": "Serge Aurier",
-      "pos": "DF",
-      "imp": 30,
-      "fifa_overall": 75
-    }
+    {"name": "Franck Kessie", "pos": "MF", "imp": 82, "fifa_overall": 81},
+    {"name": "Simon Adingra", "pos": "FW", "imp": 75, "fifa_overall": 79},
+    {"name": "Amad Diallo", "pos": "FW", "imp": 72, "fifa_overall": 79},
+    {"name": "Seko Fofana", "pos": "MF", "imp": 70, "fifa_overall": 80},
+    {"name": "Ousmane Diomande", "pos": "DF", "imp": 65, "fifa_overall": 79},
+    {"name": "Nicolas Pepe", "pos": "FW", "imp": 55, "fifa_overall": 78}
   ],
   "Iran": [
-    {
-      "name": "Alireza Jahanbakhsh",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 77
-    },
-    {
-      "name": "Mehdi Taremi",
-      "pos": "FW",
-      "imp": 65,
-      "fifa_overall": 81
-    },
-    {
-      "name": "Sardar Azmoun",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 79
-    },
-    {
-      "name": "Ali Beiranvand",
-      "pos": "GK",
-      "imp": 35,
-      "fifa_overall": 77
-    }
+    {"name": "Mehdi Taremi", "pos": "FW", "imp": 96, "fifa_overall": 81},
+    {"name": "Alireza Jahanbakhsh", "pos": "FW", "imp": 65, "fifa_overall": 77},
+    {"name": "Sardar Azmoun", "pos": "FW", "imp": 60, "fifa_overall": 79},
+    {"name": "Alireza Beiranvand", "pos": "GK", "imp": 50, "fifa_overall": 77}
   ],
   "Saudi Arabia": [
-    {
-      "name": "Salem Al-Dawsari",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 77
-    },
-    {
-      "name": "Yasser Al-Shahrani",
-      "pos": "DF",
-      "imp": 35,
-      "fifa_overall": 73
-    },
-    {
-      "name": "Mohamed Al-Owais",
-      "pos": "GK",
-      "imp": 40,
-      "fifa_overall": 76
-    },
-    {
-      "name": "Firas Al-Buraikan",
-      "pos": "FW",
-      "imp": 45,
-      "fifa_overall": 74
-    }
+    {"name": "Salem Al-Dawsari", "pos": "FW", "imp": 88, "fifa_overall": 77},
+    {"name": "Firas Al-Buraikan", "pos": "FW", "imp": 65, "fifa_overall": 74},
+    {"name": "Mohammed Al-Owais", "pos": "GK", "imp": 55, "fifa_overall": 76},
+    {"name": "Mohamed Kanno", "pos": "MF", "imp": 58, "fifa_overall": 74},
+    {"name": "Saud Abdulhamid", "pos": "DF", "imp": 52, "fifa_overall": 75}
   ],
   "Panama": [
-    {
-      "name": "Rolando Blackburn",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 70
-    },
-    {
-      "name": "Alberto Quintero",
-      "pos": "FW",
-      "imp": 35,
-      "fifa_overall": 68
-    },
-    {
-      "name": "Anibal Godoy",
-      "pos": "MF",
-      "imp": 40,
-      "fifa_overall": 71
-    }
+    {"name": "Anibal Godoy", "pos": "MF", "imp": 75, "fifa_overall": 71},
+    {"name": "Adalberto Carrasquilla", "pos": "MF", "imp": 65, "fifa_overall": 70},
+    {"name": "Ismael Diaz", "pos": "FW", "imp": 60, "fifa_overall": 70},
+    {"name": "Cecilio Waterman", "pos": "FW", "imp": 55, "fifa_overall": 68}
   ],
   "Qatar": [
-    {
-      "name": "Akram Afif",
-      "pos": "FW",
-      "imp": 60,
-      "fifa_overall": 76
-    },
-    {
-      "name": "Almoez Ali",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 73
-    },
-    {
-      "name": "Hassan Al-Haydos",
-      "pos": "MF",
-      "imp": 40,
-      "fifa_overall": 73
-    }
+    {"name": "Akram Afif", "pos": "FW", "imp": 90, "fifa_overall": 76},
+    {"name": "Almoez Ali", "pos": "FW", "imp": 55, "fifa_overall": 73},
+    {"name": "Hassan Al-Haydos", "pos": "MF", "imp": 45, "fifa_overall": 73}
   ],
   "Paraguay": [
-    {
-      "name": "Miguel Almiron",
-      "pos": "MF",
-      "imp": 60,
-      "fifa_overall": 79
-    },
-    {
-      "name": "Gustavo Gomez",
-      "pos": "DF",
-      "imp": 45,
-      "fifa_overall": 78
-    },
-    {
-      "name": "Julio Enciso",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 76
-    }
+    {"name": "Miguel Almiron", "pos": "MF", "imp": 80, "fifa_overall": 79},
+    {"name": "Gustavo Gomez", "pos": "DF", "imp": 55, "fifa_overall": 78},
+    {"name": "Julio Enciso", "pos": "FW", "imp": 60, "fifa_overall": 76},
+    {"name": "Antonio Sanabria", "pos": "FW", "imp": 55, "fifa_overall": 75}
   ],
   "Bosnia and Herzegovina": [
-    {
-      "name": "Edin Dzeko",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 79
-    },
-    {
-      "name": "Miralem Pjanic",
-      "pos": "MF",
-      "imp": 50,
-      "fifa_overall": 79
-    },
-    {
-      "name": "Sead Kolasinac",
-      "pos": "DF",
-      "imp": 35,
-      "fifa_overall": 77
-    },
-    {
-      "name": "Amer Gojak",
-      "pos": "MF",
-      "imp": 35,
-      "fifa_overall": 73
-    }
+    {"name": "Edin Dzeko", "pos": "FW", "imp": 78, "fifa_overall": 79},
+    {"name": "Ermedin Demirovic", "pos": "FW", "imp": 72, "fifa_overall": 77},
+    {"name": "Sead Kolasinac", "pos": "DF", "imp": 45, "fifa_overall": 75},
+    {"name": "Nikola Vasilj", "pos": "GK", "imp": 50, "fifa_overall": 73},
+    {"name": "Amir Hadziahmetovic", "pos": "MF", "imp": 55, "fifa_overall": 74}
   ],
   "New Zealand": [
-    {
-      "name": "Chris Wood",
-      "pos": "FW",
-      "imp": 60,
-      "fifa_overall": 77
-    },
-    {
-      "name": "Clayton Lewis",
-      "pos": "MF",
-      "imp": 35,
-      "fifa_overall": 70
-    }
+    {"name": "Chris Wood", "pos": "FW", "imp": 82, "fifa_overall": 77},
+    {"name": "Liberato Cacace", "pos": "DF", "imp": 45, "fifa_overall": 72}
   ],
   "Cape Verde": [
-    {
-      "name": "Gelson Martins",
-      "pos": "FW",
-      "imp": 60,
-      "fifa_overall": 77
-    },
-    {
-      "name": "Ryan Mendes",
-      "pos": "FW",
-      "imp": 45,
-      "fifa_overall": 72
-    }
+    {"name": "Garry Rodrigues", "pos": "FW", "imp": 60, "fifa_overall": 72},
+    {"name": "Ryan Mendes", "pos": "FW", "imp": 45, "fifa_overall": 72},
+    {"name": "Logan Costa", "pos": "DF", "imp": 50, "fifa_overall": 73},
+    {"name": "Jamiro Monteiro", "pos": "MF", "imp": 52, "fifa_overall": 71}
   ],
   "Jordan": [
-    {
-      "name": "Yazan Al-Naimat",
-      "pos": "FW",
-      "imp": 45,
-      "fifa_overall": 68
-    },
-    {
-      "name": "Baha Faisal",
-      "pos": "MF",
-      "imp": 35,
-      "fifa_overall": 65
-    }
+    {"name": "Yazan Al-Naimat", "pos": "FW", "imp": 82, "fifa_overall": 68},
+    {"name": "Baha Faisal", "pos": "MF", "imp": 30, "fifa_overall": 65}
   ],
   "Uzbekistan": [
-    {
-      "name": "Eldor Shomurodov",
-      "pos": "FW",
-      "imp": 60,
-      "fifa_overall": 74
-    },
-    {
-      "name": "Jasur Yakhshiboev",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 68
-    },
-    {
-      "name": "Abbosbek Fayzullaev",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 72
-    }
+    {"name": "Eldor Shomurodov", "pos": "FW", "imp": 85, "fifa_overall": 74},
+    {"name": "Abbosbek Fayzullaev", "pos": "MF", "imp": 60, "fifa_overall": 72},
+    {"name": "Jasur Yakhshiboev", "pos": "FW", "imp": 30, "fifa_overall": 68}
   ],
   "DR Congo": [
-    {
-      "name": "Cedric Bakambu",
-      "pos": "FW",
-      "imp": 55,
-      "fifa_overall": 76
-    },
-    {
-      "name": "Chancel Mbemba",
-      "pos": "DF",
-      "imp": 45,
-      "fifa_overall": 76
-    },
-    {
-      "name": "Arthur Masuaku",
-      "pos": "DF",
-      "imp": 35,
-      "fifa_overall": 74
-    }
+    {"name": "Cedric Bakambu", "pos": "FW", "imp": 75, "fifa_overall": 76},
+    {"name": "Chancel Mbemba", "pos": "DF", "imp": 60, "fifa_overall": 76},
+    {"name": "Yoane Wissa", "pos": "FW", "imp": 65, "fifa_overall": 75},
+    {"name": "Arthur Masuaku", "pos": "DF", "imp": 20, "fifa_overall": 74}
   ],
   "Iraq": [
-    {
-      "name": "Aymen Hussein",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 70
-    },
-    {
-      "name": "Amjed Attwan",
-      "pos": "MF",
-      "imp": 35,
-      "fifa_overall": 65
-    }
+    {"name": "Aymen Hussein", "pos": "FW", "imp": 82, "fifa_overall": 70},
+    {"name": "Amjed Attwan", "pos": "MF", "imp": 28, "fifa_overall": 65}
   ],
   "South Africa": [
-    {
-      "name": "Percy Tau",
-      "pos": "FW",
-      "imp": 60,
-      "fifa_overall": 74
-    },
-    {
-      "name": "Bafana Bafana",
-      "pos": "MF",
-      "imp": 30,
-      "fifa_overall": 0
-    },
-    {
-      "name": "Ronwen Williams",
-      "pos": "GK",
-      "imp": 40,
-      "fifa_overall": 74
-    }
+    {"name": "Percy Tau", "pos": "FW", "imp": 55, "fifa_overall": 74},
+    {"name": "Ronwen Williams", "pos": "GK", "imp": 45, "fifa_overall": 74},
+    {"name": "Lyle Foster", "pos": "FW", "imp": 60, "fifa_overall": 73},
+    {"name": "Themba Zwane", "pos": "MF", "imp": 50, "fifa_overall": 73}
   ],
   "Haiti": [
-    {
-      "name": "Duckens Nazon",
-      "pos": "FW",
-      "imp": 50,
-      "fifa_overall": 66
-    },
-    {
-      "name": "Frantzdy Pierrot",
-      "pos": "FW",
-      "imp": 40,
-      "fifa_overall": 64
-    }
+    {"name": "Duckens Nazon", "pos": "FW", "imp": 82, "fifa_overall": 66},
+    {"name": "Frantzdy Pierrot", "pos": "FW", "imp": 32, "fifa_overall": 64},
+    {"name": "Jean-Ricner Bellegarde", "pos": "MF", "imp": 55, "fifa_overall": 68}
   ],
   "Curacao": [
-    {
-      "name": "Jurien Gaari",
-      "pos": "MF",
-      "imp": 40,
-      "fifa_overall": 65
-    },
-    {
-      "name": "Leandro Bacuna",
-      "pos": "MF",
-      "imp": 45,
-      "fifa_overall": 72
-    },
-    {
-      "name": "Cuco Martina",
-      "pos": "DF",
-      "imp": 30,
-      "fifa_overall": 68
-    }
+    {"name": "Leandro Bacuna", "pos": "MF", "imp": 80, "fifa_overall": 72},
+    {"name": "Jurien Gaari", "pos": "DF", "imp": 28, "fifa_overall": 65},
+    {"name": "Tahith Chong", "pos": "FW", "imp": 65, "fifa_overall": 73}
+  ],
+  "Scotland": [
+    {"name": "Andy Robertson", "pos": "DF", "imp": 85, "fifa_overall": 83},
+    {"name": "Scott McTominay", "pos": "MF", "imp": 82, "fifa_overall": 81},
+    {"name": "John McGinn", "pos": "MF", "imp": 75, "fifa_overall": 80},
+    {"name": "Kieran Tierney", "pos": "DF", "imp": 60, "fifa_overall": 79},
+    {"name": "Lawrence Shankland", "pos": "FW", "imp": 65, "fifa_overall": 75},
+    {"name": "Angus Gunn", "pos": "GK", "imp": 50, "fifa_overall": 75}
   ]
 }

@@ -23,7 +23,6 @@ DEFAULT_GROUPS = {
     "L": ["England", "Croatia", "Ghana", "Panama"],
 }
 
-# Bracket oficial R32 (slot, grupo_idx 0-11, 0=ganador/1=subcampeon)
 _FIFA_FIXED_SLOTS = [
     (0,  0, 1), (1,  1, 1), (2,  5, 0), (3,  2, 1), (4,  4, 0),
     (6,  8, 0), (8,  10, 1), (9,  11, 1), (10,  7, 0), (11,  9, 1),
@@ -53,6 +52,77 @@ def elo_win_prob(elo_a, elo_b):
 def expected_goals(elo_a, elo_b):
     p = elo_win_prob(elo_a, elo_b)
     return BASE_GOALS * (1.0 + (p - 0.5)), BASE_GOALS * (1.0 - (p - 0.5))
+
+
+def penca_ev(la, lb, pool_picks=None):
+    """
+    Calcula el pronostico optimo para la Penca Ovacion (sistema 8/5/3).
+
+    Metodo 1 (pool_picks=None): maximiza EV puro.
+      EV(ga,gb) = P(exacto)*8 + P(misma diferencia)*5 + P(mismo ganador)*3
+
+    Metodo 2 (pool_picks=dict): maximiza EV relativo al pool.
+      pool_picks = {(ga,gb): fraccion}
+      EV_rel(ga,gb) = EV_propio(ga,gb) - EV_promedio_del_pool
+    """
+    scorelines = {}
+    for ga in range(8):
+        pa = _poisson.pmf(ga, la)
+        for gb in range(8):
+            scorelines[(ga, gb)] = pa * _poisson.pmf(gb, lb)
+
+    def winner(ga, gb):
+        return 1 if ga > gb else (-1 if ga < gb else 0)
+
+    ev_pure = {}
+    for (gp, gp2) in scorelines:
+        diff_pred = gp - gp2
+        w_pred = winner(gp, gp2)
+        ev = 0.0
+        for (ga, gb), p in scorelines.items():
+            if ga == gp and gb == gp2:
+                ev += 8 * p
+            elif ga - gb == diff_pred:
+                ev += 5 * p
+            elif winner(ga, gb) == w_pred:
+                ev += 3 * p
+        ev_pure[(gp, gp2)] = ev
+
+    if pool_picks is None:
+        ev_final = ev_pure
+    else:
+        pool_ev_per_result = {}
+        for (ga, gb) in scorelines:
+            pool_pts = 0.0
+            for (gp, gp2), frac in pool_picks.items():
+                if frac <= 0:
+                    continue
+                if ga == gp and gb == gp2:
+                    pool_pts += 8 * frac
+                elif ga - gb == gp - gp2:
+                    pool_pts += 5 * frac
+                elif winner(ga, gb) == winner(gp, gp2):
+                    pool_pts += 3 * frac
+            pool_ev_per_result[(ga, gb)] = pool_pts
+
+        pool_expected = sum(
+            scorelines[(ga, gb)] * pool_ev_per_result[(ga, gb)]
+            for (ga, gb) in scorelines
+        )
+        ev_final = {}
+        for (gp, gp2) in scorelines:
+            ev_final[(gp, gp2)] = ev_pure[(gp, gp2)] - pool_expected
+
+    ranked = sorted(ev_final.items(), key=lambda x: -x[1])
+    best, best_ev = ranked[0]
+    return {
+        "best": {"home": best[0], "away": best[1], "score": f"{best[0]}-{best[1]}"},
+        "ev": round(best_ev, 4),
+        "all_ev": [
+            {"score": f"{g}-{g2}", "home": g, "away": g2, "ev": round(ev, 4)}
+            for (g, g2), ev in ranked[:10]
+        ],
+    }
 
 
 def match_probabilities(elo_a, elo_b, is_knockout=False):
@@ -95,7 +165,6 @@ def run_monte_carlo(elo_ratings, groups=None, played_results=None,
     elo_arr     = np.array([max(1400., elo_ratings.get(t, 1700.) + adj.get(t, 0.))
                             for t in all_teams], dtype=np.float64)
 
-    # Partidos de grupos
     match_list = []
     for g_idx, (_, teams) in enumerate(group_items):
         for i in range(4):
@@ -143,7 +212,6 @@ def run_monte_carlo(elo_ratings, groups=None, played_results=None,
                   + gf_st[ni, gi, third_loc])
     t_order = np.argsort(-thirds_key, axis=1)
 
-    # Bracket
     if n_groups == 12:
         bracket = np.zeros((N, 32), dtype=np.int32)
         for slot, g_i, w_or_r in _FIFA_FIXED_SLOTS:
@@ -161,7 +229,6 @@ def run_monte_carlo(elo_ratings, groups=None, played_results=None,
         bracket = np.concatenate([qualified.reshape(N, n_groups * 2), best8], axis=1)
         for sim_i in range(N): rng.shuffle(bracket[sim_i])
 
-    # Knockout
     ROUND_KEYS = ["r32", "r16", "qf", "sf", "final", "winner"]
     counts = {k: np.zeros(n_teams, dtype=np.int64) for k in ROUND_KEYS}
     for slot in range(bracket.shape[1]):
