@@ -159,8 +159,13 @@ def embed_data_in_html(data):
         html = html.replace("// --- Data loading", inject + "\n\n// --- Data loading", 1)
 
     os.makedirs(os.path.dirname(os.path.abspath(DASHBOARD_OUT)), exist_ok=True)
-    with open(DASHBOARD_OUT, "w", encoding="utf-8") as f:
+    # Escritura atomica: tmp + rename para evitar truncamiento en mounts grandes
+    tmp = DASHBOARD_OUT + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
         f.write(html)
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp, DASHBOARD_OUT)
 
 
 def run(n_simulations=N_SIMULATIONS, verbose=True):

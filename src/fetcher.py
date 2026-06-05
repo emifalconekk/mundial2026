@@ -16,6 +16,13 @@ HEADERS = {"X-Auth-Token": API_KEY} if API_KEY else {}
 WORLD_CUP_CODE = "WC"
 CACHE_FILE = os.path.join(os.path.dirname(__file__), "../data/cache.json")
 
+# API-Football (api-sports.io) -- para lesiones
+API_FOOTBALL_KEY = os.environ.get("API_FOOTBALL_KEY", "")
+API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
+API_FOOTBALL_HEADERS = {"x-apisports-key": API_FOOTBALL_KEY} if API_FOOTBALL_KEY else {}
+WC_2026_LEAGUE_ID = 1
+WC_2026_SEASON = 2026
+
 
 def _load_cache():
     if os.path.exists(CACHE_FILE):
@@ -23,7 +30,6 @@ def _load_cache():
             with open(CACHE_FILE) as f:
                 return json.load(f)
         except (json.JSONDecodeError, OSError):
-            # Cache corrupto — se resetea solo
             try:
                 os.remove(CACHE_FILE)
             except OSError:
@@ -37,7 +43,7 @@ def _save_cache(data):
     tmp = CACHE_FILE + ".tmp"
     with open(tmp, "w") as f:
         json.dump(data, f, indent=2)
-    os.replace(tmp, CACHE_FILE)  # atómico: nunca deja el archivo a medias
+    os.replace(tmp, CACHE_FILE)
 
 
 def _get(url, params=None, cache_key=None, max_age_minutes=15):
@@ -229,6 +235,85 @@ def _elo_fallback():
     }
 
 
+def get_injuries():
+    """
+    Obtiene lesiones del Mundial 2026 desde API-Football (/injuries endpoint).
+    Devuelve lista de dicts con info de cada jugador lesionado.
+    Requiere API_FOOTBALL_KEY en el entorno.
+    Fallback: lee data/lesiones.json y devuelve formato compatible.
+    """
+    if not API_FOOTBALL_KEY:
+        print("warning: API_FOOTBALL_KEY no configurada -- usando lesiones.json local")
+        return _injuries_from_local()
+
+    url = f"{API_FOOTBALL_BASE}/injuries"
+    params = {"league": WC_2026_LEAGUE_ID, "season": WC_2026_SEASON}
+    cache_key = "injuries_api"
+
+    cache = _load_cache()
+    now = time.time()
+    if cache_key in cache:
+        entry = cache[cache_key]
+        age_minutes = (now - entry["ts"]) / 60
+        if age_minutes < 60:
+            return entry["data"]
+
+    try:
+        resp = requests.get(
+            url, headers=API_FOOTBALL_HEADERS, params=params, timeout=10
+        )
+        resp.raise_for_status()
+        data = resp.json()
+    except requests.RequestException as e:
+        print(f"warning: Error fetching injuries: {e}")
+        if cache_key in cache:
+            return cache[cache_key]["data"]
+        return _injuries_from_local()
+
+    injuries = []
+    for item in data.get("response", []):
+        player = item.get("player", {})
+        team = item.get("team", {})
+        fixture = item.get("fixture", {})
+        injuries.append({
+            "player": player.get("name", ""),
+            "team": team.get("name", ""),
+            "type": player.get("type", ""),
+            "reason": player.get("reason", ""),
+            "fixture_id": fixture.get("id"),
+            "date": fixture.get("date", ""),
+        })
+
+    cache[cache_key] = {"ts": now, "data": injuries}
+    _save_cache(cache)
+    print(f"Lesiones cargadas desde API-Football: {len(injuries)}")
+    return injuries
+
+
+def _injuries_from_local():
+    """Lee data/lesiones.json y convierte al formato de get_injuries()."""
+    lesiones_file = os.path.join(os.path.dirname(__file__), "../data/lesiones.json")
+    if not os.path.exists(lesiones_file):
+        return []
+    try:
+        with open(lesiones_file) as f:
+            data = json.load(f)
+        result = []
+        for team, players in data.items():
+            for player_name in players:
+                result.append({
+                    "player": player_name,
+                    "team": team,
+                    "type": "Missing - Injury",
+                    "reason": "Lesion (fuente local)",
+                    "fixture_id": None,
+                    "date": "",
+                })
+        return result
+    except Exception:
+        return []
+
+
 def get_match_summary(match):
     home = match.get("homeTeam", {}).get("name", "?")
     away = match.get("awayTeam", {}).get("name", "?")
@@ -259,3 +344,8 @@ if __name__ == "__main__":
         print("Primeros 3:")
         for m in upcoming[:3]:
             print(f"  {get_match_summary(m)}")
+    print("\n=== TEST INJURIES ===")
+    injuries = get_injuries()
+    print(f"Total lesiones: {len(injuries)}")
+    for inj in injuries[:5]:
+        print(f"  {inj['team']} -- {inj['player']} ({inj['type']})")

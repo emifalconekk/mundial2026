@@ -96,8 +96,14 @@ input:checked + .toggle-slider:before{transform:translateX(26px);background:#fff
 .imp-med{background:#f59e0b20;color:#fbbf24;border:1px solid #f59e0b40}
 .imp-low{background:#10b98120;color:#34d399;border:1px solid #10b98140}
 .player-fifa{font-size:.7rem;padding:1px 6px;border-radius:3px;font-weight:700;flex-shrink:0;background:#7c3aed20;color:#a78bfa;border:1px solid #7c3aed40}
-.team-selector{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-.team-selector select{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:8px 12px;font-size:.9rem;cursor:pointer}
+.team-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;font-size:.8rem;cursor:pointer;border:1px solid #1e293b;background:#0f172a;color:#94a3b8;transition:.15s;white-space:nowrap}
+.team-chip:hover{border-color:#334155;color:#e2e8f0;background:#1e293b}
+.team-chip.selected{border-color:#3b82f6;background:#1d4ed820;color:#60a5fa}
+.team-chip.has-baja{border-color:#ef444440;color:#f87171;background:#ef444410}
+.team-chip.has-baja.selected{border-color:#ef4444;background:#ef444420}
+.group-section{margin-bottom:14px}
+.group-label{font-size:.68rem;color:#475569;font-weight:700;letter-spacing:.08em;margin-bottom:6px}
+.group-chips{display:flex;flex-wrap:wrap;gap:6px}
 .lesiones-summary{background:#ef444410;border:1px solid #ef444440;border-radius:8px;padding:10px 14px;margin-top:12px;font-size:.85rem;color:#f87171;display:none}
 .btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;transition:.2s}
 .btn-primary{background:#1d4ed8;color:#fff}.btn-primary:hover{background:#1e40af}
@@ -171,19 +177,25 @@ input:checked + .toggle-slider:before{transform:translateX(26px);background:#fff
 
   <div class="section" id="tab-planteles">
     <div class="card">
-      <h2>🏥 Bajas / Lesionados</h2>
-      <p style="color:#94a3b8;font-size:.85rem;margin-bottom:12px">
-        Marcá jugadores lesionados o suspendidos. El impacto en Elo cambia según el modo activo.
-      </p>
-      <div class="team-selector">
-        <select id="team-select" onchange="renderSquad(this.value)">
-          <option value="">— Elegí un equipo —</option>
-        </select>
-        <button class="btn btn-danger" onclick="resetLesiones()">🗑 Limpiar todo</button>
-        <button class="btn btn-success" onclick="exportarLesiones()">💾 Exportar lesiones.json</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+        <div>
+          <h2 style="margin:0">🏥 Planteles y Lesiones</h2>
+          <p style="color:#64748b;font-size:.8rem;margin:4px 0 0">Tildá los jugadores que están lesionados o suspendidos — el modelo ajusta el Elo del equipo automáticamente.</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-danger" onclick="resetLesiones()">🗑 Limpiar bajas</button>
+          <button class="btn btn-success" onclick="exportarLesiones()">💾 Exportar</button>
+        </div>
       </div>
       <div id="lesiones-summary" class="lesiones-summary"></div>
-      <div id="squad-container"></div>
+      <div id="group-team-picker" style="margin-top:8px"></div>
+      <div id="squad-panel" style="display:none;margin-top:16px;background:#0f172a;border-radius:12px;border:1px solid #1e293b;overflow:hidden">
+        <div id="squad-panel-header" style="padding:14px 16px;background:#1e293b;display:flex;align-items:center;justify-content:space-between">
+          <div id="squad-panel-title" style="font-weight:700;font-size:1rem"></div>
+          <span onclick="document.getElementById('squad-panel').style.display='none';document.querySelectorAll('.team-chip.selected').forEach(e=>e.classList.remove('selected'))" style="cursor:pointer;color:#64748b;font-size:1.2rem;padding:0 4px">×</span>
+        </div>
+        <div id="squad-container" style="padding:12px"></div>
+      </div>
     </div>
   </div>
 </main>
@@ -355,82 +367,168 @@ function renderFeaturedMatch(){
     </div>`;
 }
 
-// ─── Penca EV calculation (JS, método 2) ────────────────────────────────────
-function pencaEV(la, lb, poolPicks) {
-  // poolPicks: {score: fraction} e.g. {"1-0": 0.67, "2-0": 0.15}
+// ─── Penca EV (M1 puro) ──────────────────────────────────────────────────────
+function pencaEV_pure(la, lb) {
   const MAX = 7;
-  const poisson = (k, l) => {
-    let v = Math.exp(-l); for(let i=0;i<k;i++) v*=l/(i+1); return v;
-  };
+  const poisson = (k, l) => { let v=Math.exp(-l); for(let i=0;i<k;i++) v*=l/(i+1); return v; };
   const mat = {};
   for(let ga=0;ga<MAX;ga++) for(let gb=0;gb<MAX;gb++)
     mat[`${ga}-${gb}`] = poisson(ga,la)*poisson(gb,lb);
-
   const winner = (a,b) => a>b?1:(a<b?-1:0);
-
-  // EV puro
-  const evPure = {};
+  let best = null, bestEv = -1;
   for(let gp=0;gp<MAX;gp++) for(let gp2=0;gp2<MAX;gp2++) {
-    const key = `${gp}-${gp2}`;
-    const dp = gp-gp2, wp = winner(gp,gp2);
-    let ev = 0;
+    const dp=gp-gp2, wp=winner(gp,gp2);
+    let ev=0;
     for(let ga=0;ga<MAX;ga++) for(let gb=0;gb<MAX;gb++) {
-      const p = mat[`${ga}-${gb}`];
+      const p=mat[`${ga}-${gb}`];
       if(ga===gp&&gb===gp2) ev+=8*p;
       else if(ga-gb===dp) ev+=5*p;
       else if(winner(ga,gb)===wp) ev+=3*p;
     }
-    evPure[key] = ev;
+    if(ev>bestEv){ bestEv=ev; best=`${gp}-${gp2}`; }
+  }
+  return [best, bestEv];
+}
+
+// ─── Penca P_beat (M2 correcto, Clair & Letscher 2007) ───────────────────────
+// Para cada pick posible, calcula P(mis puntos > puntos de participante random del pool)
+// Basado en: "Optimal Strategies for Sports Betting Pools", Operations Research, 2007
+function pencaPbeat(la, lb, poolPicks) {
+  const MAX = 7;
+  const poisson = (k, l) => { let v=Math.exp(-l); for(let i=0;i<k;i++) v*=l/(i+1); return v; };
+  const mat = {};
+  for(let ga=0;ga<MAX;ga++) for(let gb=0;gb<MAX;gb++)
+    mat[`${ga}-${gb}`] = poisson(ga,la)*poisson(gb,lb);
+  const winner = (a,b) => a>b?1:(a<b?-1:0);
+
+  function myPts(gp,gp2,ga,gb){
+    const dp=gp-gp2, wp=winner(gp,gp2);
+    if(ga===gp&&gb===gp2) return 8;
+    if(ga-gb===dp) return 5;
+    if(winner(ga,gb)===wp) return 3;
+    return 0;
   }
 
-  if(!poolPicks || Object.keys(poolPicks).length===0) {
-    // Método 1
-    return Object.entries(evPure).sort((a,b)=>b[1]-a[1])[0];
-  }
+  let best=null, bestPbeat=-1;
+  const allResults={};
 
-  // Pool EV por resultado
-  const poolEvPerResult = {};
-  for(let ga=0;ga<MAX;ga++) for(let gb=0;gb<MAX;gb++) {
-    const key = `${ga}-${gb}`;
-    let pts = 0;
-    for(const [score, frac] of Object.entries(poolPicks)) {
-      if(frac<=0) continue;
-      const [gp,gp2] = score.split("-").map(Number);
-      if(ga===gp&&gb===gp2) pts+=8*frac;
-      else if(ga-gb===gp-gp2) pts+=5*frac;
-      else if(winner(ga,gb)===winner(gp,gp2)) pts+=3*frac;
+  for(let gp=0;gp<MAX;gp++) for(let gp2=0;gp2<MAX;gp2++) {
+    let pbeat=0;
+    for(let ga=0;ga<MAX;ga++) for(let gb=0;gb<MAX;gb++) {
+      const p = mat[`${ga}-${gb}`];
+      const mine = myPts(gp,gp2,ga,gb);
+      let beat=0, tie=0;
+      for(const [score,frac] of Object.entries(poolPicks)){
+        const [pp,pp2]=score.split('-').map(Number);
+        const theirs = myPts(pp,pp2,ga,gb);
+        if(mine>theirs) beat+=frac;
+        else if(mine===theirs) tie+=frac;
+      }
+      pbeat += p*(beat + tie*0.5);
     }
-    poolEvPerResult[key] = pts;
+    allResults[`${gp}-${gp2}`] = pbeat;
+    if(pbeat>bestPbeat){ bestPbeat=pbeat; best=`${gp}-${gp2}`; }
   }
-  const poolExpected = Object.entries(mat).reduce((s,[k,p])=>s+p*poolEvPerResult[k],0);
+  return {best, pbeat: bestPbeat, all: allResults};
+}
 
-  const evRel = {};
-  for(const [key,ev] of Object.entries(evPure))
-    evRel[key] = ev - poolExpected;
 
-  return Object.entries(evRel).sort((a,b)=>b[1]-a[1])[0];
+function pencaBreakdown(la, lb, score) {
+  // Calcula cuántos puntos esperados aporta cada "bucket" para un marcador dado
+  const MAX = 7;
+  const poisson = (k,l) => { let v=Math.exp(-l); for(let i=0;i<k;i++) v*=l/(i+1); return v; };
+  const [gp, gp2] = score.split("-").map(Number);
+  const dp = gp - gp2;
+  const wp = gp>gp2 ? 1 : (gp<gp2 ? -1 : 0);
+  let p8=0, p5=0, p3=0;
+  for(let ga=0;ga<MAX;ga++) for(let gb=0;gb<MAX;gb++) {
+    const p = poisson(ga,la)*poisson(gb,lb);
+    const w = ga>gb?1:(ga<gb?-1:0);
+    if(ga===gp&&gb===gp2) p8+=p;
+    else if(ga-gb===dp) p5+=p;
+    else if(w===wp) p3+=p;
+  }
+  return {p8, p5, p3, ev: p8*8+p5*5+p3*3};
 }
 
 function calcPencaM2(cardId, la, lb) {
   const card = document.getElementById(cardId);
   const rows = card.querySelectorAll(".penca-pool-row");
   const poolPicks = {};
-  let total = 0;
+  let totalPct = 0;
   rows.forEach(row => {
     const score = row.querySelector(".pp-score").value.trim();
-    const pct   = parseFloat(row.querySelector(".pp-pct").value) || 0;
-    if(score && pct > 0) { poolPicks[score] = pct/100; total += pct/100; }
+    const p     = parseFloat(row.querySelector(".pp-pct").value) || 0;
+    if(score && p > 0) { poolPicks[score] = p/100; totalPct += p; }
   });
-  const [bestScore, bestEv] = pencaEV(la, lb, poolPicks);
-  const el = card.querySelector(".penca-m2-result");
-  if(el) {
-    el.innerHTML = `
-      <div class="penca-badge penca-m2" style="margin-top:8px">
-        <span style="font-size:.7rem;color:#7c3aed">M2 vs pool</span>
-        <span class="penca-score penca-score-m2">${bestScore}</span>
-        <span class="penca-ev">${bestEv>=0?"+":""}${bestEv.toFixed(2)} pts rel.</span>
-      </div>`;
+
+  if(Object.keys(poolPicks).length === 0) {
+    card.querySelector(".penca-m2-result").innerHTML =
+      `<div style="color:#f87171;font-size:.78rem;margin-top:8px">Ingresá al menos un marcador con su porcentaje.</div>`;
+    return;
   }
+
+  // P_beat: probabilidad de superar a un participante random del pool
+  const result = pencaPbeat(la, lb, poolPicks);
+  const bestScore = result.best;
+  const pbeat = result.pbeat;
+  const bd = pencaBreakdown(la, lb, bestScore);
+
+  // M1 para comparar
+  const [m1score, m1ev] = pencaEV_pure(la, lb);
+  const sameAsM1 = bestScore === m1score;
+
+  const poolList = Object.entries(poolPicks)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([s,f])=>`<b>${s}</b> (${(f*100).toFixed(0)}%)`)
+    .join(", ");
+  const restoPct = Math.max(0, 100 - totalPct).toFixed(0);
+
+  // Top 3 picks por P_beat para mostrar comparación
+  const top3 = Object.entries(result.all)
+    .sort((a,b)=>b[1]-a[1]).slice(0,3);
+
+  const el = card.querySelector(".penca-m2-result");
+  el.innerHTML = `
+    <div style="background:#1a1030;border:1px solid #7c3aed30;border-radius:10px;padding:12px;margin-top:10px">
+      <div style="font-size:.7rem;color:#a78bfa;font-weight:700;letter-spacing:.05em;margin-bottom:10px">
+        MEJOR JUGADA VS POOL — basado en P(superar al pool)
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+        <div style="background:#7c3aed;border-radius:8px;padding:4px 16px;font-size:1.3rem;font-weight:800;color:#fff">${bestScore}</div>
+        <div>
+          <div style="font-size:1rem;font-weight:700;color:#a78bfa">${(pbeat*100).toFixed(1)}% del pool</div>
+          <div style="font-size:.72rem;color:#64748b">chance de superarlos en este partido</div>
+        </div>
+        ${sameAsM1
+          ? `<div style="font-size:.72rem;color:#34d399;background:#10b98115;border:1px solid #10b98130;border-radius:5px;padding:3px 8px">✓ Coincide con M1</div>`
+          : `<div style="font-size:.72rem;color:#fbbf24;background:#f59e0b15;border:1px solid #f59e0b30;border-radius:5px;padding:3px 8px">⚡ Distinto a M1 (${m1score})</div>`}
+      </div>
+
+      <div style="font-size:.78rem;color:#94a3b8;line-height:1.7;margin-bottom:12px">
+        El pool eligió ${poolList}${restoPct>0?` y ${restoPct}% otros`:""}.
+        Si elegís <b style="color:#e2e8f0">${bestScore}</b>, en promedio superarás a <b style="color:#a78bfa">${(pbeat*100).toFixed(1)}%</b>
+        de los participantes del pool en este partido — calculado según la probabilidad real de cada marcador.
+        ${!sameAsM1 ? `<br><span style="color:#fbbf24">Nota: difiere de M1 (${m1score}) porque el pool está concentrado en ciertos marcadores — diferenciarte te da ventaja cuando salen resultados inesperados.</span>` : ''}
+      </div>
+
+      <div style="font-size:.72rem;color:#64748b;margin-bottom:6px;font-weight:600">COMPARACIÓN TOP 3 POR P(SUPERAR AL POOL)</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        ${top3.map(([score, pb], i) => {
+          const bdi = pencaBreakdown(la, lb, score);
+          return `<div style="display:flex;align-items:center;gap:8px">
+            <div style="width:44px;text-align:center;font-weight:800;font-size:.9rem;color:${i===0?'#a78bfa':'#64748b'}">${score}</div>
+            <div style="flex:1;background:#0f172a;border-radius:4px;overflow:hidden;height:16px">
+              <div style="width:${(pb/top3[0][1]*100).toFixed(0)}%;height:100%;background:${i===0?'#7c3aed':'#1e293b'};border-radius:4px"></div>
+            </div>
+            <div style="font-size:.78rem;color:${i===0?'#a78bfa':'#64748b'};min-width:80px;text-align:right">
+              ${(pb*100).toFixed(1)}% beat · ${bdi.ev.toFixed(2)} EV
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
 }
 
 function renderMatchesList(){
@@ -460,26 +558,44 @@ function renderMatchesList(){
       <div class="penca-bar">
         <div class="penca-row">
           <span style="font-size:.7rem;color:#475569;font-weight:600">🎯 PENCA</span>
-          ${m1 ? `<div class="penca-badge">
-            <span style="font-size:.7rem;color:#475569">M1 EV puro</span>
+          ${m1 ? `<div class="penca-badge" style="cursor:pointer" onclick="toggleM1Explain('${cardId}')">
+            <span style="font-size:.7rem;color:#475569">Pronóstico óptimo</span>
             <span class="penca-score">${m1}</span>
-            <span class="penca-ev">${m1ev} pts esp.</span>
+            <span class="penca-ev">${m1ev} pts esp. ▾</span>
           </div>` : ""}
-          <span class="penca-toggle" onclick="togglePool('${cardId}')">⚙ Ajustar por pool ▾</span>
+          <span class="penca-toggle" onclick="togglePool('${cardId}')">⚙ vs pool ▾</span>
+        </div>
+        <div id="m1-explain-${cardId}" style="display:none;margin-top:8px">
+          <div id="m1-explain-content-${cardId}"></div>
         </div>
         <div class="penca-pool-section" id="pool-${cardId}">
-          <div style="font-size:.72rem;color:#64748b;margin-bottom:6px">Ingresá los marcadores más votados en la Penca:</div>
+          <div style="font-size:.72rem;color:#94a3b8;margin-bottom:10px;line-height:1.5">
+            Copiá los marcadores más votados de la Penca Ovación y su porcentaje:
+          </div>
+          <div style="display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;margin-bottom:4px">
+            <span style="font-size:.68rem;color:#475569;font-weight:600">RESULTADO</span>
+            <span style="font-size:.68rem;color:#475569;font-weight:600">% EN LA PENCA</span>
+            <span></span>
+          </div>
           <div id="pool-rows-${cardId}">
             ${[0,1,2].map(i=>`
-            <div class="penca-input-row penca-pool-row">
-              <input class="pp-score" placeholder="1-0" style="width:46px">
-              <input class="pp-pct" placeholder="%" style="width:44px">
-              <span style="font-size:.72rem;color:#475569">%</span>
+            <div class="penca-pool-row" style="display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;margin-bottom:6px">
+              <input class="pp-score" placeholder="ej: 1-0"
+                style="width:70px;background:#0f172a;border:1px solid #334155;border-radius:6px;color:#f1f5f9;padding:6px 8px;font-size:.85rem;font-weight:600;text-align:center">
+              <div style="display:flex;align-items:center;gap:6px">
+                <input class="pp-pct" placeholder="0" type="number" min="0" max="100"
+                  style="width:100%;background:#0f172a;border:1px solid #334155;border-radius:6px;color:#f1f5f9;padding:6px 8px;font-size:.85rem;text-align:center">
+                <span style="font-size:.82rem;color:#475569;font-weight:600;min-width:14px">%</span>
+              </div>
+              <span onclick="this.closest('.penca-pool-row').remove()" style="cursor:pointer;color:#475569;font-size:1rem;padding:0 4px" title="Eliminar">×</span>
             </div>`).join("")}
           </div>
-          <div style="display:flex;gap:8px;margin-top:6px;align-items:center">
-            <span class="penca-toggle" onclick="addPoolRow('${cardId}')">+ agregar</span>
-            <button onclick="calcPencaM2('${cardId}',${la},${lb})" style="background:#7c3aed;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:.78rem;cursor:pointer;font-weight:600">Calcular M2</button>
+          <div style="display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap">
+            <span class="penca-toggle" onclick="addPoolRow('${cardId}')">＋ agregar fila</span>
+            <button onclick="calcPencaM2('${cardId}',${la},${lb})"
+              style="background:#7c3aed;color:#fff;border:none;border-radius:6px;padding:6px 16px;font-size:.82rem;cursor:pointer;font-weight:700;margin-left:auto">
+              ▶ Calcular
+            </button>
           </div>
           <div class="penca-m2-result"></div>
         </div>
@@ -493,11 +609,116 @@ function togglePool(cardId) {
   el.style.display = el.style.display==="block" ? "none" : "block";
 }
 
+function toggleM1Explain(cardId) {
+  const wrap = document.getElementById("m1-explain-"+cardId);
+  const content = document.getElementById("m1-explain-content-"+cardId);
+  if(wrap.style.display === "block") { wrap.style.display="none"; return; }
+
+  // Obtener datos del partido desde el badge
+  const card = document.getElementById(cardId);
+  const badge = card.querySelector(".penca-score");
+  const evEl  = card.querySelector(".penca-ev");
+  if(!badge) return;
+  const score = badge.textContent.trim();
+  const evText = evEl ? evEl.textContent.replace(" pts esp. ▾","").trim() : "";
+
+  // Recuperar lambdas del botón calcular (están en el onclick)
+  const btn = card.querySelector("button[onclick*='calcPencaM2']");
+  if(!btn) return;
+  const m = btn.getAttribute("onclick").match(/calcPencaM2\('[^']+',([^,]+),([^)]+)\)/);
+  if(!m) return;
+  const la = parseFloat(m[1]), lb = parseFloat(m[2]);
+  const bd = pencaBreakdown(la, lb, score);
+
+  const [gp, gp2] = score.split("-").map(Number);
+  const diff = gp - gp2;
+  const diffText = diff > 0 ? `${diff} gol${diff>1?"es":""} a favor del local`
+                 : diff < 0 ? `${Math.abs(diff)} gol${Math.abs(diff)>1?"es":""} a favor del visitante`
+                 : "empate (0 goles de diferencia)";
+
+  // Calcular top 3 picks para comparar
+  const MAX=7;
+  const poisson=(k,l)=>{let v=Math.exp(-l);for(let i=0;i<k;i++)v*=l/(i+1);return v;};
+  const allEvs=[];
+  for(let a=0;a<MAX;a++) for(let b=0;b<MAX;b++){
+    let p8=0,p5=0,p3=0,dp=a-b,wp=a>b?1:(a<b?-1:0);
+    for(let ga=0;ga<MAX;ga++) for(let gb=0;gb<MAX;gb++){
+      const p=poisson(ga,la)*poisson(gb,lb),w=ga>gb?1:(ga<gb?-1:0);
+      if(ga===a&&gb===b)p8+=p;else if(ga-gb===dp)p5+=p;else if(w===wp)p3+=p;
+    }
+    allEvs.push({score:`${a}-${b}`,ev:p8*8+p5*5+p3*3,p8,p5,p3});
+  }
+  allEvs.sort((a,b)=>b.ev-a.ev);
+  const top3 = allEvs.slice(0,3);
+
+  content.innerHTML = `
+    <div style="background:#0f1e38;border:1px solid #1d4ed840;border-radius:10px;padding:12px">
+      <div style="font-size:.72rem;color:#60a5fa;font-weight:700;letter-spacing:.05em;margin-bottom:10px">¿POR QUÉ ${score}?</div>
+
+      <div style="font-size:.82rem;color:#cbd5e1;line-height:1.6;margin-bottom:12px">
+        El modelo corrió <b style="color:#f1f5f9">100.000 simulaciones</b> del partido y calculó cuántos puntos
+        esperás ganar en la Penca con cada marcador posible, usando el sistema de 8/5/3 puntos.
+        <b style="color:#60a5fa">${score}</b> es el que maximiza esos puntos esperados: en promedio te da
+        <b style="color:#60a5fa">${evText} puntos</b> por este partido.
+      </div>
+
+      <div style="font-size:.72rem;color:#64748b;margin-bottom:6px;font-weight:600">DESGLOSE DE ${score}</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px">
+        <div style="background:#0f172a;border-radius:7px;padding:8px;text-align:center;border:1px solid #1e293b">
+          <div style="font-size:1rem;font-weight:800;color:#fbbf24">8 pts</div>
+          <div style="font-size:.68rem;color:#64748b;margin-top:2px">si sale exactamente ${score}</div>
+          <div style="font-size:.82rem;color:#94a3b8;font-weight:600;margin-top:4px">${(bd.p8*100).toFixed(1)}% chances</div>
+        </div>
+        <div style="background:#0f172a;border-radius:7px;padding:8px;text-align:center;border:1px solid #1e293b">
+          <div style="font-size:1rem;font-weight:800;color:#60a5fa">5 pts</div>
+          <div style="font-size:.68rem;color:#64748b;margin-top:2px">si hay ${diffText}</div>
+          <div style="font-size:.82rem;color:#94a3b8;font-weight:600;margin-top:4px">${(bd.p5*100).toFixed(1)}% chances</div>
+        </div>
+        <div style="background:#0f172a;border-radius:7px;padding:8px;text-align:center;border:1px solid #1e293b">
+          <div style="font-size:1rem;font-weight:800;color:#94a3b8">3 pts</div>
+          <div style="font-size:.68rem;color:#64748b;margin-top:2px">si solo acertás el ganador</div>
+          <div style="font-size:.82rem;color:#94a3b8;font-weight:600;margin-top:4px">${(bd.p3*100).toFixed(1)}% chances</div>
+        </div>
+      </div>
+      <div style="font-size:.72rem;color:#475569;margin-bottom:12px">
+        EV = ${(bd.p8*100).toFixed(1)}%×8 + ${(bd.p5*100).toFixed(1)}%×5 + ${(bd.p3*100).toFixed(1)}%×3
+        = ${(bd.p8*8).toFixed(2)} + ${(bd.p5*5).toFixed(2)} + ${(bd.p3*3).toFixed(2)}
+        = <b style="color:#60a5fa">${bd.ev.toFixed(2)} pts</b>
+      </div>
+
+      <div style="font-size:.72rem;color:#64748b;margin-bottom:6px;font-weight:600">COMPARACIÓN CON OTRAS OPCIONES</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        ${top3.map((t,i)=>`
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:44px;text-align:center;font-weight:800;font-size:.9rem;color:${i===0?"#60a5fa":"#64748b"}">${t.score}</div>
+          <div style="flex:1;background:#0f172a;border-radius:4px;overflow:hidden;height:18px;position:relative">
+            <div style="width:${(t.ev/top3[0].ev*100).toFixed(0)}%;height:100%;background:${i===0?"#1d4ed8":"#1e293b"};border-radius:4px"></div>
+          </div>
+          <div style="font-size:.78rem;color:${i===0?"#60a5fa":"#64748b"};font-weight:600;min-width:60px;text-align:right">${t.ev.toFixed(2)} pts${i===0?" ✓":""}</div>
+        </div>`).join("")}
+      </div>
+      <div style="font-size:.68rem;color:#334155;margin-top:8px">
+        Nota: usar el "vs pool ▾" de arriba para ver si conviene cambiar de pronóstico según lo que eligió el resto.
+      </div>
+    </div>`;
+
+  wrap.style.display = "block";
+}
+
 function addPoolRow(cardId) {
   const container = document.getElementById("pool-rows-"+cardId);
   const row = document.createElement("div");
-  row.className = "penca-input-row penca-pool-row";
-  row.innerHTML = `<input class="pp-score" placeholder="1-0" style="width:46px"><input class="pp-pct" placeholder="%" style="width:44px"><span style="font-size:.72rem;color:#475569">%</span>`;
+  row.className = "penca-pool-row";
+  row.style.cssText = "display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;margin-bottom:6px";
+  row.innerHTML = `
+    <input class="pp-score" placeholder="ej: 1-0"
+      style="width:70px;background:#0f172a;border:1px solid #334155;border-radius:6px;color:#f1f5f9;padding:6px 8px;font-size:.85rem;font-weight:600;text-align:center">
+    <div style="display:flex;align-items:center;gap:6px">
+      <input class="pp-pct" placeholder="0" type="number" min="0" max="100"
+        style="width:100%;background:#0f172a;border:1px solid #334155;border-radius:6px;color:#f1f5f9;padding:6px 8px;font-size:.85rem;text-align:center">
+      <span style="font-size:.82rem;color:#475569;font-weight:600;min-width:14px">%</span>
+    </div>
+    <span onclick="this.closest('.penca-pool-row').remove()" style="cursor:pointer;color:#475569;font-size:1rem;padding:0 4px" title="Eliminar">×</span>`;
   container.appendChild(row);
 }
 
@@ -545,45 +766,135 @@ function renderResults(){
 
 // ─── Planteles ────────────────────────────────────────────────────────────────
 function initPlanteles(){
-  if(!DATA)return;
+  if(!DATA) return;
   const saved = localStorage.getItem("lesiones_wc2026");
-  if(saved) try{LESIONES_STATE=JSON.parse(saved);}catch(e){}
+  if(saved) try{ LESIONES_STATE = JSON.parse(saved); }catch(e){}
   else if(DATA.lesiones) LESIONES_STATE = JSON.parse(JSON.stringify(DATA.lesiones));
 
-  const sel = document.getElementById("team-select");
-  if(sel.options.length<=1){
-    Object.keys(DATA.squads||{}).sort().forEach(t=>{
-      const o=document.createElement("option");
-      o.value=t; o.textContent=flag(t)+" "+t;
-      sel.appendChild(o);
-    });
+  const picker = document.getElementById("group-team-picker");
+  if(picker && !picker.dataset.built) {
+    const groups = DATA.groups || {};
+    let html = '';
+    for(const [g, teams] of Object.entries(groups)) {
+      html += '<div class="group-section"><div class="group-label">GRUPO ' + g + '</div><div class="group-chips">';
+      for(const t of teams) {
+        const id = 'chip-' + t.replace(/\s/g,'_');
+        html += '<div class="team-chip" id="' + id + '" onclick="selectTeam(this)">' + flag(t) + ' ' + t + '</div>';
+      }
+      html += '</div></div>';
+    }
+    picker.innerHTML = html;
+    picker.dataset.built = "1";
   }
   updateLesionesSummary();
+  updateChipStates();
 }
 
-function renderSquad(team){
-  if(!team||!DATA){document.getElementById("squad-container").innerHTML="";return;}
-  const squads = FIFA_MODE && DATA.squads_fifa ? DATA.squads_fifa : DATA.squads;
-  const players = (squads[team]||[]).slice().sort((a,b)=>b.imp-a.imp);
-  const injured = LESIONES_STATE[team]||[];
-  const showFifa = DATA.has_fifa_data && DATA.squads_fifa;
+function updateChipStates(){
+  if(!DATA) return;
+  Object.values(DATA.groups||{}).flat().forEach(function(t) {
+    const chip = document.getElementById('chip-'+t.replace(/\s/g,'_'));
+    if(!chip) return;
+    const hasBaja = (LESIONES_STATE[t]||[]).length > 0;
+    chip.classList.toggle('has-baja', hasBaja);
+  });
+}
 
-  document.getElementById("squad-container").innerHTML = players.map(p=>{
-    const isBaja = injured.includes(p.name);
-    const impClass = p.imp>=70?"imp-high":p.imp>=45?"imp-med":"imp-low";
-    // Show FIFA overall if available
-    const fifaBadge = showFifa && p.fifa_overall > 0
-      ? `<span class="player-fifa">${p.fifa_overall}</span>` : "";
-    return `<div class="player-row ${isBaja?"baja":""}">
-      <input type="checkbox" ${isBaja?"checked":""} onchange="toggleBaja('${team}','${p.name.replace(/'/g,"\\'")}',this.checked)">
-      <span class="player-imp ${impClass}" title="Importancia ${FIFA_MODE?'FIFA':'manual'}">${p.imp}</span>
-      ${fifaBadge}
-      <span style="flex:1">${p.name}</span>
-      <span style="font-size:.72rem;color:#475569">${p.pos}</span>
-    </div>`;
-  }).join("");
+function selectTeam(chip){
+  document.querySelectorAll('.team-chip').forEach(function(c){ c.classList.remove('selected'); });
+  chip.classList.add('selected');
+  const team = chip.textContent.trim().replace(/^\S+\s+/,''); // quitar emoji
+  // buscar nombre exacto en DATA.squads
+  const teamName = Object.keys(DATA.squads||{}).find(function(k){ return chip.textContent.indexOf(k) >= 0; }) || team;
+  showSquadPopup(chip, teamName);
+}
+
+function showSquadPopup(chip, team){
+  // Cerrar popup anterior
+  const prev = document.getElementById('squad-popup');
+  if(prev) prev.remove();
+
+  const players = (DATA.squads[team] || []).slice().sort(function(a,b){ return b.imp - a.imp; });
+  const injured = LESIONES_STATE[team] || [];
+  const showFifa = DATA.has_fifa_data;
+  const posLabel = {FW:'Del.',MF:'Med.',DF:'Def.',GK:'Arq.'};
+
+  let playersHtml = '';
+  for(const p of players) {
+    const isBaja = injured.indexOf(p.name) >= 0;
+    const impClass = p.imp>=70?'imp-high':p.imp>=45?'imp-med':'imp-low';
+    const fifaHtml = (showFifa && p.fifa_overall) ? '<span class="player-fifa">'+p.fifa_overall+'</span>' : '';
+    playersHtml += '<div class="player-row' + (isBaja?' baja':'') + '" onclick="toggleBajaPopup(this,'+JSON.stringify(team)+','+JSON.stringify(p.name)+','+(!isBaja)+')" style="cursor:pointer">'
+      + '<input type="checkbox"' + (isBaja?' checked':'') + ' onclick="event.stopPropagation();toggleBajaPopup(this.closest(\'.player-row\'),'+JSON.stringify(team)+','+JSON.stringify(p.name)+',this.checked)">'
+      + '<span class="player-imp '+impClass+'">'+p.imp+'</span>'
+      + fifaHtml
+      + '<span style="flex:1;font-size:.85rem">'+p.name+'</span>'
+      + '<span style="font-size:.7rem;color:#475569">'+( posLabel[p.pos]||p.pos )+'</span>'
+      + '</div>';
+  }
+
+  if(!playersHtml) playersHtml = '<p style="color:#475569;padding:12px;text-align:center">Sin jugadores cargados.</p>';
+
+  const popup = document.createElement('div');
+  popup.id = 'squad-popup';
+  popup.style.cssText = 'position:fixed;background:#1e293b;border:1px solid #334155;border-radius:12px;padding:0;width:320px;max-height:70vh;overflow-y:auto;z-index:9999;box-shadow:0 8px 32px #00000080';
+  popup.innerHTML = '<div style="padding:12px 14px;background:#0f172a;border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:1;border-bottom:1px solid #334155">'
+    + '<span style="font-weight:700;font-size:.95rem">'+flag(team)+' '+team+'</span>'
+    + '<span onclick="closeSquadPopup()" style="cursor:pointer;color:#64748b;font-size:1.2rem;line-height:1;padding:0 4px">×</span>'
+    + '</div>'
+    + '<div style="padding:10px">' + playersHtml
+    + '<div style="margin-top:8px;font-size:.7rem;color:#475569">Tildá para marcar como baja. Número = importancia táctica.</div>'
+    + '</div>';
+
+  document.body.appendChild(popup);
+
+  // Posicionar cerca del chip
+  const rect = chip.getBoundingClientRect();
+  const pw = 320, ph = Math.min(400, popup.scrollHeight);
+  let left = rect.left;
+  let top = rect.bottom + 8;
+  if(left + pw > window.innerWidth - 8) left = window.innerWidth - pw - 8;
+  if(top + ph > window.innerHeight - 8) top = rect.top - ph - 8;
+  if(top < 8) top = 8;
+  popup.style.left = left + 'px';
+  popup.style.top = top + 'px';
+
+  // Cerrar al hacer click fuera
+  setTimeout(function(){
+    document.addEventListener('click', function outsideClick(e){
+      if(!popup.contains(e.target) && e.target !== chip){
+        closeSquadPopup();
+        document.removeEventListener('click', outsideClick);
+      }
+    });
+  }, 100);
+}
+
+function closeSquadPopup(){
+  const p = document.getElementById('squad-popup');
+  if(p) p.remove();
+  document.querySelectorAll('.team-chip').forEach(function(c){ c.classList.remove('selected'); });
+}
+
+function toggleBajaPopup(row, team, player, checked){
+  if(!LESIONES_STATE[team]) LESIONES_STATE[team] = [];
+  if(checked){
+    if(LESIONES_STATE[team].indexOf(player) < 0) LESIONES_STATE[team].push(player);
+  } else {
+    LESIONES_STATE[team] = LESIONES_STATE[team].filter(function(p){ return p !== player; });
+  }
+  localStorage.setItem('lesiones_wc2026', JSON.stringify(LESIONES_STATE));
+  // Actualizar fila visualmente
+  const cb = row.querySelector('input[type=checkbox]');
+  if(checked){ row.classList.add('baja'); if(cb) cb.checked = true; }
+  else { row.classList.remove('baja'); if(cb) cb.checked = false; }
+  // Actualizar chip
+  const chip = document.getElementById('chip-'+team.replace(/\s/g,'_'));
+  if(chip) chip.classList.toggle('has-baja', (LESIONES_STATE[team]||[]).length > 0);
   updateLesionesSummary();
 }
+
+function renderSquad(team){} // legacy compat
 
 function toggleBaja(team,player,checked){
   if(!LESIONES_STATE[team]) LESIONES_STATE[team]=[];
@@ -612,7 +923,9 @@ function resetLesiones(){
   if(!confirm("¿Limpiar todas las bajas?"))return;
   LESIONES_STATE={};
   localStorage.removeItem("lesiones_wc2026");
-  renderSquad(document.getElementById("team-select").value);
+  // squad panel se cierra al limpiar
+  document.getElementById("squad-panel").style.display="none";
+  document.querySelectorAll(".team-chip").forEach(c=>c.classList.remove("selected"));
   updateLesionesSummary();
 }
 
