@@ -10,6 +10,24 @@ Motor de predicción estadística para el Mundial 2026. Corre 100.000 simulacion
 
 ---
 
+## Estado actual (junio 2026)
+
+El torneo arranca el 11 de junio. El modelo está corriendo con lesiones reales cargadas:
+
+```json
+{
+  "Spain":   ["Lamine Yamal"],
+  "Brazil":  ["Neymar"],
+  "Uruguay": ["Giorgian de Arrascaeta"],
+  "Canada":  ["Alphonso Davies"],
+  "Austria": ["Christoph Baumgartner"]
+}
+```
+
+La tarea programada `mundial2026-lesiones` corre diariamente, busca lesiones nuevas, actualiza `lesiones.json` y regenera el HTML automáticamente.
+
+---
+
 ## Archivos clave
 
 ### `src/model.py`
@@ -31,7 +49,7 @@ El corazón del sistema. Totalmente vectorizado con NumPy.
 
 **Constantes:**
 ```python
-ELO_K = 40          # factor K (no se usa directamente, es referencia)
+ELO_K = 40          # factor K (referencia)
 ELO_D = 400         # divisor para probabilidades Elo
 BASE_GOALS = 1.35   # goles esperados base por partido
 N_SIMULATIONS = 100_000
@@ -84,6 +102,21 @@ El model.py devuelve `[{"home":1, "away":0, "prob":0.1163}]` — la conversión 
 
 ---
 
+### `src/update_ratings.py` ← NUEVO
+Actualiza `fifa_overall` de los jugadores en `squads.json` usando **api-sports.io**.
+
+- Convierte rating de la API (escala 0-10) a escala FIFA (60-99)
+- Usa `data/ratings_cache.json` para evitar repetir requests (plan gratis: 100 req/día)
+- Requiere variable de entorno `API_FOOTBALL_KEY`
+- Registro gratis en: https://dashboard.api-sports.io/register
+
+```bash
+export API_FOOTBALL_KEY=tu_key
+python src/update_ratings.py
+```
+
+---
+
 ### `dashboard.html`
 Template HTML/JS autocontenido. `predictor.py` lo lee, inyecta `window.EMBEDDED_DATA = {...}` en el marcador `// __DATA_INJECT_HERE__` y guarda como `mundial2026_predictor.html`.
 
@@ -107,8 +140,7 @@ if(window.EMBEDDED_DATA){        // primero: datos embebidos (modo archivo local
 ```json
 {
   "Argentina": [
-    {"name": "Lionel Messi", "pos": "FW", "imp": 100, "fifa_overall": 91},
-    ...
+    {"name": "Lionel Messi", "pos": "FW", "imp": 100, "fifa_overall": 91}
   ]
 }
 ```
@@ -122,11 +154,11 @@ Estado de lesiones editable desde el dashboard. Formato:
 ```json
 {
   "Argentina": [],
-  "Francia": ["Kylian Mbappé"],
-  ...
+  "France": ["Kylian Mbappe"],
+  "Brazil": ["Neymar"]
 }
 ```
-Los nombres deben coincidir exactamente con los de `squads.json`.
+**IMPORTANTE:** Los nombres deben coincidir exactamente con los de `squads.json` (mismos acentos, mayúsculas, espacios). La tarea programada `mundial2026-lesiones` actualiza este archivo diariamente con bajas 100% confirmadas.
 
 ---
 
@@ -138,10 +170,29 @@ Binario de 4950 bytes (495 × 10). Tabla precalculada de todas las combinaciones
 ## Qué NO está en el repo (generado automáticamente)
 
 - `data/predictions.json` — generado por `predictor.py`
-- `data/cache.json` — caché de la API
+- `data/cache.json` — caché de la API de partidos
+- `data/ratings_cache.json` — caché de api-sports.io para ratings
 - `mundial2026_predictor.html` — HTML con datos embebidos
 
 Para generarlos: `python src/predictor.py`
+
+---
+
+## Tarea programada de lesiones
+
+La tarea `mundial2026-lesiones` corre diariamente de forma autónoma:
+1. Busca noticias de las últimas 24hs sobre bajas confirmadas
+2. Cruza contra `squads.json` (nombre exacto)
+3. Agrega solo bajas **100% confirmadas** a `lesiones.json`
+4. Ejecuta `python3 predictor.py` para regenerar el HTML
+5. Reporta: confirmadas / dudas / ya en el modelo
+
+**Criterio para agregar al modelo:**
+- 🔴 CONFIRMADA (se agrega): descartado oficialmente del torneo
+- 🟡 DUDA (se reporta, no se agrega): probable baja sin confirmar
+- 🟢 RECUPERACIÓN (se reporta): lesionado pero espera llegar
+
+**Path del bash en el scheduled task:** `/sessions/<id>/mnt/mundial2026/src` (varía por sesión).
 
 ---
 
@@ -151,7 +202,7 @@ Para generarlos: `python src/predictor.py`
 → Correr `python src/predictor.py` para generar el HTML con datos embebidos.
 
 **`cache.json` corrupto:**
-→ Se auto-recupera solo desde la versión actual de `fetcher.py`. Si tenés una versión vieja, borrá `data/cache.json` manualmente.
+→ Se auto-recupera desde la versión actual de `fetcher.py`. Si persiste, borrar `data/cache.json` manualmente.
 
 **Python no encontrado en Windows:**
 → Asegurarse de que Python esté en el PATH. Probar con `py` en lugar de `python` en los .bat.
@@ -159,12 +210,18 @@ Para generarlos: `python src/predictor.py`
 **El toggle FIFA 26 está desactivado:**
 → Necesita `data/squads.json` con campo `fifa_overall` en los jugadores.
 
+**`lesiones.json` se trunca al escribir con Edit tool:**
+→ Usar siempre bash (`cat > archivo << 'EOF'`) para escribir este archivo en la sesión, no el Edit tool de Claude, porque hay problemas de encoding con Windows/OneDrive.
+
+**Git lock en push:**
+→ Si aparece `HEAD.lock`, hay un proceso git abierto en Windows (GitHub Desktop, VS Code, etc.). Cerrarlo y borrar el lock manualmente desde Windows.
+
 ---
 
 ## Setup desde cero
 
 ```bash
-git clone https://github.com/TU_USUARIO/mundial2026
+git clone https://github.com/emifalconekk/mundial2026
 cd mundial2026
 pip install numpy scipy requests
 python src/predictor.py
